@@ -1,14 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { signOut } from "@/lib/signout";
 import { getMe } from "@/lib/me";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import Link from "next/link";
 import { NewShopForm } from "./form";
 
