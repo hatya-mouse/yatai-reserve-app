@@ -20,5 +20,7 @@ export async function serverApi(
         cache: "no-store",
     });
 
+    console.log(`[serverApi] ${path}: ${response.status}`);
+
     return response;
 }
