@@ -5,11 +5,11 @@ use sqlx::SqlitePool;
 pub(crate) async fn clean_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
     // Remove unused tokens from the database
     let now = Utc::now().timestamp();
-    sqlx::query("DELETE FROM auth_tokens WHERE expires_at < ? OR used = 1")
+    sqlx::query("DELETE FROM auth_tokens WHERE expires_at < ?")
         .bind(now)
         .execute(pool)
         .await?;
-    sqlx::query("DELETE FROM status_tokens WHERE expires_at < ? OR used = 1")
+    sqlx::query("DELETE FROM status_tokens WHERE expires_at < ?")
         .bind(now)
         .execute(pool)
         .await?;

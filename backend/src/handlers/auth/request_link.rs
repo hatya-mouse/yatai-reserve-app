@@ -9,7 +9,7 @@ use sqlx::SqlitePool;
 use std::time::Duration;
 
 #[derive(Deserialize)]
-struct RequestLinkBody {
+pub(crate) struct RequestLinkBody {
     pub email: String,
 }
 
@@ -23,7 +23,7 @@ pub(crate) async fn request_link(
     let expires_at = Utc::now() + Duration::from_mins(10);
 
     // Remove the existing query from the email address
-    sqlx::query("DELETE FROM auth_tokens WHERE email = ? AND used = 0")
+    sqlx::query("DELETE FROM auth_tokens WHERE email = ?")
         .bind(&payload.email)
         .execute(&pool)
         .await
@@ -33,7 +33,7 @@ pub(crate) async fn request_link(
         })?;
 
     // Insert the newly generated token and its expiration date
-    sqlx::query("INSERT INTO auth_tokens (token, email, expires_at, used) VALUES (?, ?, ?, 0)")
+    sqlx::query("INSERT INTO auth_tokens (token, email, expires_at) VALUES (?, ?, ?)")
         .bind(&token)
         .bind(&payload.email)
         .bind(expires_at.timestamp())

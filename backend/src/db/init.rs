@@ -37,7 +37,6 @@ pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
             token TEXT PRIMARY KEY,
             email TEXT NOT NULL,
             expires_at INTEGER NOT NULL,
-            used BOOLEAN NOT NULL DEFAULT 0
         )
         "#,
     )
@@ -52,7 +51,6 @@ pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
             token TEXT PRIMARY KEY,
             email TEXT NOT NULL,
             expires_at DATETIME NOT NULL,
-            used BOOLEAN NOT NULL DEFAULT 0
         )
         "#,
     )
