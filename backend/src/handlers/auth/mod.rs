@@ -1,5 +1,5 @@
-mod request_link;
-mod verify;
+mod me;
+mod signout;
 
-pub(crate) use request_link::request_link;
-pub(crate) use verify::verify;
+pub(crate) use me::me;
+pub(crate) use signout::signout;

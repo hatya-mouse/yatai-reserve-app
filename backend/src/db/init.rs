@@ -23,7 +23,7 @@ pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             shop_id TEXT NOT NULL,
             email TEXT NOT NULL
-        )
+        );
         "#,
     )
     .execute(pool)
@@ -37,7 +37,7 @@ pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
             token TEXT PRIMARY KEY,
             email TEXT NOT NULL,
             expires_at INTEGER NOT NULL,
-        )
+        );
         "#,
     )
     .execute(pool)
@@ -50,8 +50,25 @@ pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
         CREATE TABLE IF NOT EXISTS status_tokens (
             token TEXT PRIMARY KEY,
             email TEXT NOT NULL,
-            expires_at DATETIME NOT NULL,
-        )
+            expires_at INTEGER NOT NULL,
+        );
+        "#,
+    )
+    .execute(pool)
+    .await?;
+
+    // Initialize sessions table
+    // sessions stores the active sessions of staffs.
+    sqlx::query(
+        r#"
+        CREATE TABLE IF NOT EXISTS sessions (
+            token TEXT PRIMARY KEY,
+            email TEXT NOT NULL,
+            expires_at INTEGER NOT NULL,
+        );
+
+        CREATE INDEX idx_sessions_expires_at
+        ON sessions(expires_at);
         "#,
     )
     .execute(pool)
@@ -67,8 +84,8 @@ pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
             email TEXT NOT NULL,
             token TEXT NOT NULL,
             status TEXT NOT NULL DEFAULT 'waiting',
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
+            created_at INTEGER NOT NULL
+        );
         "#,
     )
     .execute(pool)

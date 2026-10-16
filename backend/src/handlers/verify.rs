@@ -1,4 +1,7 @@
-use crate::tui::{println_error, println_info};
+use crate::{
+    state::AppState,
+    tui::{println_error, println_info},
+};
 use axum::{
     extract::{Query, State},
     http::StatusCode,
@@ -6,7 +9,7 @@ use axum::{
 };
 use chrono::Utc;
 use serde::Deserialize;
-use sqlx::{SqlitePool, prelude::FromRow};
+use sqlx::prelude::FromRow;
 
 #[derive(Deserialize)]
 pub(crate) struct VerifyParams {
@@ -19,7 +22,7 @@ struct AuthToken {
 }
 
 pub(crate) async fn verify(
-    State(pool): State<SqlitePool>,
+    State(state): State<AppState>,
     Query(params): Query<VerifyParams>,
 ) -> Result<impl IntoResponse, StatusCode> {
     println_info("Verification requested with token");
@@ -30,14 +33,14 @@ pub(crate) async fn verify(
     )
     .bind(&params.token)
     .bind(Utc::now().timestamp())
-    .fetch_one(&pool)
+    .fetch_one(&state.pool)
     .await
-    .map_err(|e| StatusCode::FORBIDDEN)?;
+    .map_err(|_| StatusCode::FORBIDDEN)?;
 
     // Remove the used token
     sqlx::query("DELETE FROM auth_tokens WHERE token = ?")
         .bind(&params.token)
-        .execute(&pool)
+        .execute(&state.pool)
         .await
         .map_err(|e| {
             println_error(format!("DB Error: {}", e));

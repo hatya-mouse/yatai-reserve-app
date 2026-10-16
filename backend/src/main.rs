@@ -1,10 +1,13 @@
-mod config;
 mod crypto;
 mod db;
 mod handlers;
+mod state;
 mod tui;
 
-use crate::{config::Config, tui::println_info};
+use crate::{
+    state::{AppState, Config},
+    tui::println_info,
+};
 use axum::{
     Router,
     routing::{get, post},
@@ -39,10 +42,14 @@ async fn main() {
     println_info("Starting the server...");
 
     // Start the server
+    let state = AppState {
+        pool,
+        verification_url: config.verification_url,
+    };
     let app = Router::new()
-        .route("/auth/request-link", post(handlers::auth::request_link))
-        .route("/auth/verify", get(handlers::auth::verify))
-        .with_state(pool);
+        .route("/request-signin", post(handlers::request_signin))
+        .route("/verify", get(handlers::verify))
+        .with_state(state);
 
     let address = format!("{}:{}", config.host, config.port);
     let listener = tokio::net::TcpListener::bind(address).await.unwrap();

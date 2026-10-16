@@ -1,31 +1,36 @@
 use crate::{
+    AppState,
     crypto::gen_secure_token,
     tui::{println_error, println_info},
 };
 use axum::{Json, extract::State, http::StatusCode, response::IntoResponse};
 use chrono::Utc;
 use serde::Deserialize;
-use sqlx::SqlitePool;
 use std::time::Duration;
 
 #[derive(Deserialize)]
-pub(crate) struct RequestLinkBody {
+pub(crate) struct RequestSigninBody {
     pub email: String,
 }
 
-pub(crate) async fn request_link(
-    State(pool): State<SqlitePool>,
-    Json(payload): Json<RequestLinkBody>,
+pub(crate) async fn request_signin(
+    State(state): State<AppState>,
+    Json(payload): Json<RequestSigninBody>,
 ) -> Result<impl IntoResponse, StatusCode> {
     println_info(format!("Login link requested for email {}", payload.email));
 
     let token = gen_secure_token();
     let expires_at = Utc::now() + Duration::from_mins(10);
 
+    let mut tx = state.pool.begin().await.map_err(|e| {
+        println_error(format!("DB Error: {}", e));
+        StatusCode::INTERNAL_SERVER_ERROR
+    })?;
+
     // Remove the existing query from the email address
     sqlx::query("DELETE FROM auth_tokens WHERE email = ?")
         .bind(&payload.email)
-        .execute(&pool)
+        .execute(&mut *tx)
         .await
         .map_err(|e| {
             println_error(format!("DB Error: {}", e));
@@ -37,12 +42,20 @@ pub(crate) async fn request_link(
         .bind(&token)
         .bind(&payload.email)
         .bind(expires_at.timestamp())
-        .execute(&pool)
+        .execute(&mut *tx)
         .await
         .map_err(|e| {
             println_error(format!("DB Error: {}", e));
             StatusCode::INTERNAL_SERVER_ERROR
         })?;
+
+    tx.commit().await.map_err(|e| {
+        println_error(format!("DB Error: {}", e));
+        StatusCode::INTERNAL_SERVER_ERROR
+    })?;
+
+    // SEND MAIL HERE
+    todo!();
 
     Ok(StatusCode::OK)
 }
