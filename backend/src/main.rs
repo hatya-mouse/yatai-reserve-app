@@ -1,8 +1,10 @@
 mod config;
+mod crypto;
 mod db;
 mod handlers;
+mod tui;
 
-use crate::config::Config;
+use crate::{config::Config, tui::println_info};
 use axum::{
     Router,
     routing::{get, post},
@@ -29,6 +31,12 @@ async fn main() {
     db::init_db(&pool)
         .await
         .expect("could not initialize the database");
+    // Clean up the database
+    db::clean_db(&pool)
+        .await
+        .expect("could not clean up the database");
+
+    println_info("Starting the server...");
 
     // Start the server
     let app = Router::new()
@@ -39,6 +47,6 @@ async fn main() {
     let address = format!("{}:{}", config.host, config.port);
     let listener = tokio::net::TcpListener::bind(address).await.unwrap();
 
-    println!("Listening on {}", listener.local_addr().unwrap());
+    println_info(format!("Listening on {}", listener.local_addr().unwrap()));
     axum::serve(listener, app).await.ok();
 }
