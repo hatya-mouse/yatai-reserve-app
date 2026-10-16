@@ -1,6 +1,7 @@
 use sqlx::SqlitePool;
 
 pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
+    println!("A");
     // Initialize shops table
     // shops stores the configurations for each shops.
     sqlx::query(
@@ -15,6 +16,7 @@ pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
     .execute(pool)
     .await?;
 
+    println!("A");
     // Initialize shop_members table
     // shop_members stores the email addresses and the shop it that the address belongs to.
     sqlx::query(
@@ -30,6 +32,7 @@ pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
     .execute(pool)
     .await?;
 
+    println!("A");
     // Initialize auth_tokens table
     // auth_tokens stores the currently active tokens for staffs sent over email.
     sqlx::query(
@@ -44,6 +47,7 @@ pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
     .execute(pool)
     .await?;
 
+    println!("A");
     // Initialize status_tokens table
     // status_tokens stores the currently active tokens sent over email for customers to check reservation status.
     sqlx::query(
@@ -58,6 +62,7 @@ pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
     .execute(pool)
     .await?;
 
+    println!("A");
     // Initialize sessions table
     // sessions stores the active sessions of staffs.
     sqlx::query(
@@ -75,6 +80,7 @@ pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
     .execute(pool)
     .await?;
 
+    println!("A");
     // Initialize reservations table
     // reservations stores all information of each reservations.
     sqlx::query(
