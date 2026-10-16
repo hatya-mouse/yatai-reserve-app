@@ -83,7 +83,7 @@ export default function StaffPage() {
 
                 <form action={signOut}>
                     <Button type="submit" variant="outline">
-                        ログアウト
+                        サインアウト
                     </Button>
                 </form>
             </header>

@@ -18,7 +18,7 @@ pub(crate) async fn request_signin(
     State(state): State<AppState>,
     Json(payload): Json<RequestSigninBody>,
 ) -> Result<impl IntoResponse, AppError> {
-    println_info(format!("Login link requested for email {}", payload.email));
+    println_info(format!("Signin link requested for email {}", payload.email));
 
     let token = gen_secure_token();
     let expires_at = Utc::now() + Duration::from_mins(10);

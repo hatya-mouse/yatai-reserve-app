@@ -3,12 +3,7 @@
 import { Mail, Store } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -17,9 +12,7 @@ export default function SignInForm() {
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
 
-    async function handleSubmit(
-        event: React.SubmitEvent<HTMLFormElement>,
-    ) {
+    async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
         setLoading(true);
         setMessage("");
@@ -38,12 +31,10 @@ export default function SignInForm() {
             }
 
             setMessage(
-                "ログインリンクを送信しました。メールを確認してください。",
+                "サインインリンクを送信しました。メールを確認してください。",
             );
         } catch {
-            setMessage(
-                "送信に失敗しました。もう一度お試しください。",
-            );
+            setMessage("送信に失敗しました。もう一度お試しください。");
         } finally {
             setLoading(false);
         }
@@ -60,14 +51,9 @@ export default function SignInForm() {
                 </CardHeader>
 
                 <CardContent>
-                    <form
-                        className="space-y-4"
-                        onSubmit={handleSubmit}
-                    >
+                    <form className="space-y-4" onSubmit={handleSubmit}>
                         <div className="space-y-2">
-                            <Label htmlFor="email">
-                                メールアドレス
-                            </Label>
+                            <Label htmlFor="email">メールアドレス</Label>
                             <Input
                                 id="email"
                                 name="email"
@@ -88,9 +74,7 @@ export default function SignInForm() {
                             disabled={loading}
                         >
                             <Mail className="mr-2 size-4" />
-                            {loading
-                                ? "送信中..."
-                                : "サインインリンクを送信"}
+                            {loading ? "送信中..." : "サインインリンクを送信"}
                         </Button>
 
                         {message && (
