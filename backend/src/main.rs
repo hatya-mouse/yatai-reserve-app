@@ -1,7 +1,7 @@
 mod config;
 
 use crate::config::Config;
-use axum::{Router, response::Html};
+use axum::{Router, response::Html, routing::get};
 
 #[tokio::main]
 async fn main() {
@@ -18,7 +18,7 @@ async fn main() {
 
     println!("Listening on {}", listener.local_addr().unwrap());
 
-    axum::serve(listener, app).await;
+    axum::serve(listener, app).await.ok();
 }
 
 async fn handler() -> Html<&'static str> {
