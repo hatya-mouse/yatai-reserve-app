@@ -1,4 +1,5 @@
 mod me;
+mod shops;
 mod signout;
 
 pub(crate) use me::me;
@@ -13,12 +14,7 @@ use axum::{
 use chrono::Utc;
 use sqlx::SqlitePool;
 
-use crate::tui::println_error;
-
-#[derive(Debug, Clone, sqlx::FromRow)]
-pub(crate) struct AuthUser {
-    pub email: String,
-}
+use crate::{data_types::AuthUser, tui::println_error};
 
 pub(crate) async fn auth_middleware(
     State(pool): State<SqlitePool>,

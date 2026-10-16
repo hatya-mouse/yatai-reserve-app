@@ -1,4 +1,4 @@
-use crate::{AppState, error::AppError, handlers::auth::AuthUser};
+use crate::{AppState, data_types::AuthUser, error::AppError};
 use axum::{Extension, Json, extract::State};
 use serde::Serialize;
 use sqlx::prelude::FromRow;

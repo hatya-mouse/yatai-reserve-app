@@ -7,6 +7,9 @@ use axum::{
 #[derive(Debug)]
 pub(crate) enum AppError {
     Unauthorized,
+    BadRequest,
+    NotFound,
+    Conflict,
     SqlxError(sqlx::Error),
     Internal,
 }
@@ -27,6 +30,9 @@ impl IntoResponse for AppError {
     fn into_response(self) -> Response {
         let status = match &self {
             Self::Unauthorized => StatusCode::UNAUTHORIZED,
+            Self::BadRequest => StatusCode::BAD_REQUEST,
+            Self::NotFound => StatusCode::NOT_FOUND,
+            Self::Conflict => StatusCode::CONFLICT,
             Self::SqlxError(error) => {
                 println_error(format!("Internal error: {error:#?}"));
                 StatusCode::INTERNAL_SERVER_ERROR

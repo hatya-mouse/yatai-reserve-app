@@ -1,3 +1,4 @@
+mod data_types;
 mod db;
 mod error;
 mod handlers;
