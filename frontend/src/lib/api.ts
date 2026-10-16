@@ -1,14 +1,15 @@
 import "server-only";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-export async function serverApi(
+export async function staffApi(
     path: string,
     init: RequestInit = {},
 ) {
     const token = (await cookies()).get("session")?.value;
 
     if (!token) {
-        throw new Error("Unauthorized");
+        redirect("/");
     }
 
     const headers = new Headers(init.headers);
@@ -20,7 +21,7 @@ export async function serverApi(
         cache: "no-store",
     });
 
-    console.log(`[serverApi] ${path}: ${response.status}`);
+    console.log(`[staffApi] ${path}: ${response.status}`);
 
     return response;
 }

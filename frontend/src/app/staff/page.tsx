@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
-import { serverApi } from "@/lib/api";
+import { staffApi } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { signOut } from "./actions";
@@ -17,7 +17,7 @@ function Loading() {
 }
 
 async function ShopList() {
-    const response = await serverApi("/staff/me");
+    const response = await staffApi("/staff/me");
 
     if (response.status === 401 || response.status === 403) {
         redirect("/");
