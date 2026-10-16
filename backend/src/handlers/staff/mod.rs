@@ -12,6 +12,7 @@ pub(crate) use verify::verify;
 use crate::{data_types::AuthUser, error::AppError};
 use axum::{
     extract::{Request, State},
+    http::header::AUTHORIZATION,
     middleware::Next,
     response::Response,
 };
@@ -25,14 +26,10 @@ pub(crate) async fn auth_middleware(
 ) -> Result<Response, AppError> {
     let session_token = request
         .headers()
-        .get(axum::http::header::COOKIE)
+        .get(AUTHORIZATION)
         .and_then(|header| header.to_str().ok())
-        .and_then(|cookies| {
-            cookies.split(';').find_map(|cookie| {
-                let (name, value) = cookie.trim().split_once('=')?;
-                (name == "session").then_some(value)
-            })
-        })
+        .and_then(|value| value.strip_prefix("Bearer "))
+        .filter(|token| !token.is_empty())
         .ok_or(AppError::Unauthorized)?;
 
     let user = sqlx::query_as::<_, AuthUser>(
