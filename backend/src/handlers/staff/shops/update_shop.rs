@@ -1,4 +1,4 @@
-use crate::{AppState, data_types::AuthUser, error::AppError, handlers::auth::me::ShopResponse};
+use crate::{AppState, data_types::AuthUser, error::AppError, handlers::staff::me::ShopResponse};
 use axum::{
     Extension, Json,
     extract::{Path, State},

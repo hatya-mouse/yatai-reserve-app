@@ -1,5 +1,6 @@
 mod add_shop_member;
 mod get_shop;
+mod reservations;
 mod update_shop;
 
 pub(crate) use add_shop_member::add_shop_member;

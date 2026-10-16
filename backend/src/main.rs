@@ -7,7 +7,7 @@ mod tui;
 mod utils;
 
 use crate::{
-    handlers::auth::auth_middleware,
+    handlers::staff::auth_middleware,
     state::{AppState, Config},
     tui::println_info,
 };
@@ -50,16 +50,16 @@ async fn main() {
 
     let state = AppState { pool, config };
     let auth_routes = Router::new()
-        .route("/signout", post(handlers::auth::signout))
-        .route("/me", post(handlers::auth::me))
-        .route("/shops", post(handlers::auth::shops::create_shop))
+        .route("/signout", post(handlers::staff::signout))
+        .route("/me", post(handlers::staff::me))
+        .route("/shops", post(handlers::staff::shops::create_shop))
         .route(
             "/shops/{shop_id}",
-            get(handlers::auth::shops::get_shop).patch(handlers::auth::shops::update_shop),
+            get(handlers::staff::shops::get_shop).patch(handlers::staff::shops::update_shop),
         )
         .route(
             "/shops/{shop_id}/members",
-            post(handlers::auth::shops::add_shop_member),
+            post(handlers::staff::shops::add_shop_member),
         )
         .route_layer(middleware::from_fn_with_state(
             state.pool.clone(),
@@ -67,18 +67,12 @@ async fn main() {
         ));
 
     let app = Router::new()
-        .route("/request-signin", post(handlers::request_signin))
-        .route("/verify", get(handlers::verify))
-        .nest("/auth", auth_routes)
-        .route(
-            "/shops/{shop_id}/reserve",
-            post(handlers::reservation::reserve),
-        )
-        .route(
-            "/request-status",
-            post(handlers::reservation::request_status),
-        )
-        .route("/status", get(handlers::reservation::get_status))
+        .route("/request-signin", post(handlers::staff::request_signin))
+        .route("/verify", get(handlers::staff::verify))
+        .nest("/staff", auth_routes)
+        .route("/shops/{shop_id}/reserve", post(handlers::user::reserve))
+        .route("/request-status", post(handlers::user::request_status))
+        .route("/status", get(handlers::user::get_status))
         .with_state(state);
 
     println_info(format!("Listening on {}", listener.local_addr().unwrap()));

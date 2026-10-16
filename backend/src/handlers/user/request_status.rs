@@ -1,7 +1,7 @@
 use crate::{
     AppState,
     error::AppError,
-    handlers::reservation::{renew_status_token, send_status_email},
+    handlers::user::{renew_status_token, send_status_email},
 };
 use axum::{Json, extract::State, http::StatusCode};
 use serde::Deserialize;

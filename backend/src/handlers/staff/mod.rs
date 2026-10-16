@@ -1,9 +1,13 @@
 mod me;
+mod request_signin;
 pub(crate) mod shops;
 mod signout;
+mod verify;
 
 pub(crate) use me::me;
+pub(crate) use request_signin::request_signin;
 pub(crate) use signout::signout;
+pub(crate) use verify::verify;
 
 use axum::{
     extract::{Request, State},
