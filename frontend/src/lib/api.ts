@@ -1,0 +1,22 @@
+import "server-only";
+import { cookies } from "next/headers";
+
+export async function serverApi(
+    path: string,
+    init: RequestInit = {},
+) {
+    const token = (await cookies()).get("session")?.value;
+
+    if (!token) {
+        throw new Error("Unauthorized");
+    }
+
+    const headers = new Headers(init.headers);
+    headers.set("Authorization", `Bearer ${token}`);
+
+    return fetch(`${process.env.BACKEND_URL}${path}`, {
+        ...init,
+        headers,
+        cache: "no-store",
+    });
+}
