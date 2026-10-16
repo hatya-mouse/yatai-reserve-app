@@ -49,6 +49,7 @@ async fn main() {
     let state = AppState { pool, config };
     let auth_routes = Router::new()
         .route("/signout", post(handlers::auth::signout))
+        .route("/me", post(handlers::auth::me))
         .route_layer(middleware::from_fn_with_state(
             state.pool.clone(),
             auth_middleware,

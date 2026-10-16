@@ -1,7 +1,7 @@
 use crate::{
     AppState,
     tui::{println_error, println_info},
-    utils::gen_secure_token,
+    utils::{gen_secure_token, send_email},
 };
 use axum::{Json, extract::State, http::StatusCode, response::IntoResponse};
 use chrono::Utc;
@@ -54,8 +54,24 @@ pub(crate) async fn request_signin(
         StatusCode::INTERNAL_SERVER_ERROR
     })?;
 
-    // SEND MAIL HERE
-    todo!();
+    // Send an email
+    tokio::spawn(async move {
+        let subject = String::from("メールアドレス認証");
+        let verification_link = format!("{}{}", state.config.verification_url.clone(), token);
+        let html_content = format!(
+            "10分以内に下のリンクをクリックしてサインインしてください。\n<a href={}>{}</a>",
+            verification_link, verification_link
+        );
+
+        send_email(
+            state.config.resend_key.clone(),
+            state.config.email.clone(),
+            payload.email.clone(),
+            subject,
+            html_content,
+        )
+        .await
+    });
 
     Ok(StatusCode::OK)
 }

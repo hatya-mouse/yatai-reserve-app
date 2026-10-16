@@ -20,6 +20,10 @@ pub(super) struct Config {
     pub(super) verification_url: String,
     /// The URL that the staff is redirected to after verification.
     pub(super) home_url: String,
+    /// Resend API key to send emails.
+    pub(super) resend_key: String,
+    /// An email address to send emails from.
+    pub(super) email: String,
 }
 
 impl Config {
@@ -33,6 +37,8 @@ impl Config {
             database_url: std::env::var("DATABASE_URL").unwrap_or_default(),
             verification_url: std::env::var("VERIFICATION_URL").unwrap_or_default(),
             home_url: std::env::var("HOME_URL").unwrap_or_default(),
+            resend_key: std::env::var("RESEND_KEY").unwrap_or_default(),
+            email: std::env::var("EMAIL").unwrap_or_default(),
         }
     }
 }
