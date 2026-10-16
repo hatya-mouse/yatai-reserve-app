@@ -17,17 +17,22 @@ function Loading() {
 }
 
 async function ShopList() {
-    const response = await serverApi("/staff/shops");
+    const response = await serverApi("/staff/me");
 
     if (response.status === 401 || response.status === 403) {
         redirect("/");
     }
 
     if (!response.ok) {
-        throw new Error("屋台一覧の取得に失敗しました");
+        throw new Error("ユーザー情報の取得に失敗しました");
     }
 
-    const shops: Shop[] = await response.json();
+    const me: {
+        email: string;
+        shops: Shop[];
+    } = await response.json();
+
+    const shops = me.shops;
 
     return (
         <section className="space-y-4">
