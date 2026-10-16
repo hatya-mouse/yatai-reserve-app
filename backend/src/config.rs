@@ -4,7 +4,7 @@ pub(super) struct Config {
     /// The port for the server to listen on.
     pub(super) port: u16,
     /// An URL to the SQLite database.
-    pub(super) database_url:
+    pub(super) database_url: String,
 }
 
 impl Config {
@@ -15,6 +15,7 @@ impl Config {
                 .unwrap_or_else(|_| String::from("3000"))
                 .parse()
                 .expect("Port number must be an unsigned 16 bit integer"),
+            database_url: std::env::var("DATABASE_URL").unwrap_or_default(),
         }
     }
 }
