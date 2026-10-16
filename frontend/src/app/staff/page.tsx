@@ -1,25 +1,10 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
-import { staffApi } from "@/lib/api";
+import { staffApi, Shops, Me } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { signOut } from "./actions";
+import { signOut } from "@/lib/signout";
 import Link from "next/link";
-
-type Shop = {
-    id: string;
-    name: string;
-    notify_previous: boolean;
-};
-
-type Shops = {
-    shops: Shop[];
-};
-
-type Me = {
-    name: string;
-    email: string;
-};
 
 function Loading() {
     return <p className="text-muted-foreground">読み込み中...</p>;

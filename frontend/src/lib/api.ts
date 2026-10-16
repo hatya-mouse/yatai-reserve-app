@@ -2,10 +2,22 @@ import "server-only";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export async function staffApi(
-    path: string,
-    init: RequestInit = {},
-) {
+export type Shop = {
+    id: string;
+    name: string;
+    notify_previous: boolean;
+};
+
+export type Shops = {
+    shops: Shop[];
+};
+
+export type Me = {
+    name: string;
+    email: string;
+};
+
+export async function staffApi(path: string, init: RequestInit = {}) {
     const token = (await cookies()).get("session")?.value;
 
     if (!token) {

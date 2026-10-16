@@ -75,7 +75,7 @@ async fn main() {
     let staff_routes = Router::new()
         .route("/signout", post(handlers::staff::signout))
         .route("/me", get(handlers::staff::me))
-        .route("/set_name", post(handlers::staff::set_name))
+        .route("/set-name", post(handlers::staff::set_name))
         .route(
             "/shops",
             get(handlers::staff::shops::list).post(handlers::staff::shops::create),
