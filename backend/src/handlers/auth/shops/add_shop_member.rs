@@ -1,12 +1,10 @@
+use crate::{AppState, data_types::AuthUser, error::AppError};
 use axum::{
-    Extension,
+    Extension, Json,
     extract::{Path, State},
     http::StatusCode,
 };
 use serde::Deserialize;
-use sqlx::types::Json;
-
-use crate::{AppState, data_types::AuthUser, error::AppError};
 
 #[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]

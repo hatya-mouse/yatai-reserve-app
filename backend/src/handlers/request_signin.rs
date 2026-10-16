@@ -42,23 +42,27 @@ pub(crate) async fn request_signin(
     tx.commit().await?;
 
     // Send an email
-    tokio::spawn(async move {
-        let subject = String::from("メールアドレス認証");
-        let verification_link = format!("{}{}", state.config.verification_url.clone(), token);
-        let html_content = format!(
-            "10分以内に下のリンクをクリックしてサインインしてください。\n<a href={}>{}</a>",
-            verification_link, verification_link
-        );
+    let subject = String::from("予約管理アプリメールアドレス認証");
+    let verification_link = format!("{}{}", state.config.verification_url.clone(), token);
+    let html_content = format!(
+        r#"
+        <p>予約管理アプリにサインインするには、以下のリンクを開いてください。</p>
+        <p><a href={}>サインイン</a></p>
+        <p>このリンクは発行から10時間有効です。</p>
+        <p>このメールに心当たりがない場合は、破棄してください。</p>
+        "#,
+        verification_link
+    );
 
-        send_email(
-            state.config.resend_key.clone(),
-            state.config.email.clone(),
-            payload.email.clone(),
-            subject,
-            html_content,
-        )
-        .await
-    });
+    send_email(
+        state.config.resend_key.clone(),
+        state.config.email.clone(),
+        payload.email.clone(),
+        subject,
+        html_content,
+    )
+    .await
+    .ok();
 
     Ok(StatusCode::OK)
 }

@@ -6,15 +6,14 @@ pub(crate) use add_shop_member::add_shop_member;
 pub(crate) use get_shop::get_shop;
 pub(crate) use update_shop::update_shop;
 
-use axum::{Extension, Json, extract::State};
-use serde::Deserialize;
-use sqlx::SqlitePool;
-use uuid::Uuid;
-
 use crate::{
+    AppState,
     data_types::{AuthUser, ShopResponse},
     error::AppError,
 };
+use axum::{Extension, Json, extract::State};
+use serde::Deserialize;
+use uuid::Uuid;
 
 #[derive(Debug, Deserialize)]
 pub(crate) struct CreateShopRequest {
@@ -24,7 +23,7 @@ pub(crate) struct CreateShopRequest {
 }
 
 pub(crate) async fn create_shop(
-    State(pool): State<SqlitePool>,
+    State(state): State<AppState>,
     Extension(user): Extension<AuthUser>,
     Json(body): Json<CreateShopRequest>,
 ) -> Result<Json<ShopResponse>, AppError> {
@@ -36,7 +35,7 @@ pub(crate) async fn create_shop(
 
     let shop_id = Uuid::new_v4().to_string();
 
-    let mut tx = pool.begin().await?;
+    let mut tx = state.pool.begin().await?;
 
     sqlx::query(
         r#"

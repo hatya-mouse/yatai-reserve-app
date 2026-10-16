@@ -1,5 +1,5 @@
 mod me;
-mod shops;
+pub(crate) mod shops;
 mod signout;
 
 pub(crate) use me::me;
