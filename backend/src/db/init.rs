@@ -23,6 +23,7 @@ pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             shop_id TEXT NOT NULL,
             email TEXT NOT NULL
+            UNIQUE(shop_id, email)
         );
         "#,
     )
@@ -36,7 +37,7 @@ pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
         CREATE TABLE IF NOT EXISTS auth_tokens (
             token TEXT PRIMARY KEY,
             email TEXT NOT NULL,
-            expires_at INTEGER NOT NULL,
+            expires_at INTEGER NOT NULL
         );
         "#,
     )
@@ -50,7 +51,7 @@ pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
         CREATE TABLE IF NOT EXISTS status_tokens (
             token TEXT PRIMARY KEY,
             email TEXT NOT NULL,
-            expires_at INTEGER NOT NULL,
+            expires_at INTEGER NOT NULL
         );
         "#,
     )
@@ -64,7 +65,7 @@ pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
         CREATE TABLE IF NOT EXISTS sessions (
             token TEXT PRIMARY KEY,
             email TEXT NOT NULL,
-            expires_at INTEGER NOT NULL,
+            expires_at INTEGER NOT NULL
         );
 
         CREATE INDEX idx_sessions_expires_at

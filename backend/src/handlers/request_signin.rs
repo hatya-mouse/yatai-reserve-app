@@ -1,6 +1,7 @@
 use crate::{
     AppState,
-    tui::{println_error, println_info},
+    error::AppError,
+    tui::println_info,
     utils::{gen_secure_token, send_email},
 };
 use axum::{Json, extract::State, http::StatusCode, response::IntoResponse};
@@ -16,26 +17,19 @@ pub(crate) struct RequestSigninBody {
 pub(crate) async fn request_signin(
     State(state): State<AppState>,
     Json(payload): Json<RequestSigninBody>,
-) -> Result<impl IntoResponse, StatusCode> {
+) -> Result<impl IntoResponse, AppError> {
     println_info(format!("Login link requested for email {}", payload.email));
 
     let token = gen_secure_token();
     let expires_at = Utc::now() + Duration::from_mins(10);
 
-    let mut tx = state.pool.begin().await.map_err(|e| {
-        println_error(format!("DB Error: {}", e));
-        StatusCode::INTERNAL_SERVER_ERROR
-    })?;
+    let mut tx = state.pool.begin().await?;
 
     // Remove the existing query from the email address
     sqlx::query("DELETE FROM auth_tokens WHERE email = ?")
         .bind(&payload.email)
         .execute(&mut *tx)
-        .await
-        .map_err(|e| {
-            println_error(format!("DB Error: {}", e));
-            StatusCode::INTERNAL_SERVER_ERROR
-        })?;
+        .await?;
 
     // Insert the newly generated token and its expiration date
     sqlx::query("INSERT INTO auth_tokens (token, email, expires_at) VALUES (?, ?, ?)")
@@ -43,16 +37,9 @@ pub(crate) async fn request_signin(
         .bind(&payload.email)
         .bind(expires_at.timestamp())
         .execute(&mut *tx)
-        .await
-        .map_err(|e| {
-            println_error(format!("DB Error: {}", e));
-            StatusCode::INTERNAL_SERVER_ERROR
-        })?;
+        .await?;
 
-    tx.commit().await.map_err(|e| {
-        println_error(format!("DB Error: {}", e));
-        StatusCode::INTERNAL_SERVER_ERROR
-    })?;
+    tx.commit().await?;
 
     // Send an email
     tokio::spawn(async move {

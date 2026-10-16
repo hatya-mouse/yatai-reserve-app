@@ -1,10 +1,4 @@
-use std::time::Duration;
-
-use crate::{
-    state::AppState,
-    tui::{println_error, println_info},
-    utils::gen_secure_token,
-};
+use crate::{error::AppError, state::AppState, tui::println_info, utils::gen_secure_token};
 use axum::{
     extract::{Query, State},
     http::{
@@ -16,6 +10,7 @@ use axum::{
 use chrono::Utc;
 use serde::Deserialize;
 use sqlx::prelude::FromRow;
+use std::time::Duration;
 
 #[derive(Deserialize)]
 pub(crate) struct VerifyParams {
@@ -30,7 +25,7 @@ struct AuthToken {
 pub(crate) async fn verify(
     State(state): State<AppState>,
     Query(params): Query<VerifyParams>,
-) -> Result<impl IntoResponse, StatusCode> {
+) -> Result<impl IntoResponse, AppError> {
     println_info("Verification requested with token");
 
     // Get the email associated with the token
@@ -40,27 +35,19 @@ pub(crate) async fn verify(
     .bind(&params.token)
     .bind(Utc::now().timestamp())
     .fetch_optional(&state.pool)
-    .await
-    .map_err(|e| {
-        println_error(format!("DB Error: {}", e));
-        StatusCode::INTERNAL_SERVER_ERROR
-    })?
-    .ok_or(StatusCode::FORBIDDEN)?;
+    .await?
+    .ok_or(AppError::Unauthorized)?;
 
     // Consume the magic link token
     let result = sqlx::query("DELETE FROM auth_tokens WHERE token = ? AND expires_at > ?")
         .bind(&params.token)
         .bind(Utc::now().timestamp())
         .execute(&state.pool)
-        .await
-        .map_err(|e| {
-            println_error(format!("DB Error: {}", e));
-            StatusCode::INTERNAL_SERVER_ERROR
-        })?;
+        .await?;
 
     // Prevent concurrent requests from consuming the same token
     if result.rows_affected() != 1 {
-        return Err(StatusCode::FORBIDDEN);
+        return Err(AppError::Unauthorized);
     }
 
     // Generate a new session token and store it
@@ -71,11 +58,7 @@ pub(crate) async fn verify(
         .bind(&record.email)
         .bind(session_expires_at.timestamp())
         .execute(&state.pool)
-        .await
-        .map_err(|e| {
-            println_error(format!("DB Error: {}", e));
-            StatusCode::INTERNAL_SERVER_ERROR
-        })?;
+        .await?;
 
     // Return the cookie with the new session token
     let cookie = format!(
@@ -85,15 +68,12 @@ pub(crate) async fn verify(
     );
     let mut response = StatusCode::SEE_OTHER.into_response();
 
-    response.headers_mut().insert(
-        SET_COOKIE,
-        HeaderValue::from_str(&cookie).map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?,
-    );
-    response.headers_mut().insert(
-        LOCATION,
-        HeaderValue::from_str(&state.config.home_url)
-            .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?,
-    );
+    response
+        .headers_mut()
+        .insert(SET_COOKIE, HeaderValue::from_str(&cookie)?);
+    response
+        .headers_mut()
+        .insert(LOCATION, HeaderValue::from_str(&state.config.home_url)?);
 
     Ok(response)
 }
