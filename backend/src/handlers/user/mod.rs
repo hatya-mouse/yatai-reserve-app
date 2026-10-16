@@ -1,7 +1,9 @@
+mod cancel;
 mod get_status;
 mod request_status;
 mod reserve;
 
+pub(crate) use cancel::cancel;
 pub(crate) use get_status::get_status;
 pub(crate) use request_status::request_status;
 pub(crate) use reserve::reserve;
@@ -13,7 +15,13 @@ use crate::{
     utils::{gen_secure_token, send_email},
 };
 use chrono::Utc;
+use serde::Deserialize;
 use std::time::Duration;
+
+#[derive(Debug, Deserialize)]
+pub(crate) struct StatusQuery {
+    token: String,
+}
 
 /// Sends the reservation status email to the given email address.
 async fn send_status_email(state: &AppState, email: &str, token: &str) -> Result<(), AppError> {

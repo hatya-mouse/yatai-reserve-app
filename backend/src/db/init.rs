@@ -83,7 +83,7 @@ pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             shop_id TEXT NOT NULL,
             email TEXT NOT NULL,
-            is_called BOOLEAN NOT NULL DEFAULT 0,
+            status TEXT NOT NULL,
             created_at INTEGER NOT NULL
         );
         "#,

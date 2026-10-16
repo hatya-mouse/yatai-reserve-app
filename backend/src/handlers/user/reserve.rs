@@ -44,8 +44,8 @@ pub(crate) async fn reserve(
     // Create a reservation
     sqlx::query(
         r#"
-        INSERT INTO reservations (shop_id, email, is_called, created_at)
-        VALUES (?, ?, 0, ?)
+        INSERT INTO reservations (shop_id, email, status, created_at)
+        VALUES (?, ?, 'waiting', ?)
         "#,
     )
     .bind(&shop_id)

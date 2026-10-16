@@ -49,7 +49,7 @@ async fn main() {
     let listener = tokio::net::TcpListener::bind(address).await.unwrap();
 
     let state = AppState { pool, config };
-    let auth_routes = Router::new()
+    let staff_routes = Router::new()
         .route("/signout", post(handlers::staff::signout))
         .route("/me", post(handlers::staff::me))
         .route("/shops", post(handlers::staff::shops::create_shop))
@@ -66,13 +66,20 @@ async fn main() {
             auth_middleware,
         ));
 
+    let user_routes = Router::new()
+        .route("/shops/{shop_id}/reserve", post(handlers::user::reserve))
+        .route(
+            "/reservations/{reservation_id}/cancel",
+            post(handlers::user::cancel),
+        )
+        .route("/request-status", post(handlers::user::request_status))
+        .route("/status", get(handlers::user::get_status));
+
     let app = Router::new()
         .route("/request-signin", post(handlers::staff::request_signin))
         .route("/verify", get(handlers::staff::verify))
-        .nest("/staff", auth_routes)
-        .route("/shops/{shop_id}/reserve", post(handlers::user::reserve))
-        .route("/request-status", post(handlers::user::request_status))
-        .route("/status", get(handlers::user::get_status))
+        .nest("/staff", staff_routes)
+        .nest("/user", user_routes)
         .with_state(state);
 
     println_info(format!("Listening on {}", listener.local_addr().unwrap()));
