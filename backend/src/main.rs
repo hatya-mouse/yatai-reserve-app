@@ -1,9 +1,13 @@
 mod config;
+mod handlers;
 
 use std::time::Duration;
 
 use crate::config::Config;
-use axum::{Router, response::Html, routing::get};
+use axum::{
+    Router,
+    routing::{get, post},
+};
 use sqlx::sqlite::SqlitePoolOptions;
 
 #[tokio::main]
@@ -22,15 +26,14 @@ async fn main() {
         .expect("could not connect to the database");
 
     // Start the server
-    let app = Router::new().route("/", get(handler)).with_state(pool);
+    let app = Router::new()
+        .route("/auth/request-link", post(handlers::auth::request_link))
+        .route("/auth/verify", get(handlers::auth::verify))
+        .with_state(pool);
 
     let address = format!("{}:{}", config.host, config.port);
     let listener = tokio::net::TcpListener::bind(address).await.unwrap();
 
     println!("Listening on {}", listener.local_addr().unwrap());
     axum::serve(listener, app).await.ok();
-}
-
-async fn handler() -> Html<&'static str> {
-    Html("<h1>This is a backend server of yatai-reserve-app!</h1>")
 }
