@@ -75,7 +75,11 @@ async fn main() {
     let staff_routes = Router::new()
         .route("/signout", post(handlers::staff::signout))
         .route("/me", get(handlers::staff::me))
-        .route("/shops", post(handlers::staff::shops::create))
+        .route("/set_name", post(handlers::staff::set_name))
+        .route(
+            "/shops",
+            get(handlers::staff::shops::list).post(handlers::staff::shops::create),
+        )
         .nest("/shops/{shop_id}", shops_routes)
         .route_layer(middleware::from_fn_with_state(
             state.pool.clone(),

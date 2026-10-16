@@ -5,37 +5,24 @@ use sqlx::prelude::FromRow;
 
 #[derive(Serialize)]
 pub(crate) struct MeResponse {
-    email: String,
-    shops: Vec<ShopResponse>,
-}
-
-#[derive(Serialize, FromRow)]
-pub(crate) struct ShopResponse {
-    id: String,
     name: String,
-    notify_previous: bool,
+    email: String,
 }
 
-pub(crate) async fn me(
+pub(crate) async fn list(
     Extension(user): Extension<AuthUser>,
     State(state): State<AppState>,
 ) -> Result<Json<MeResponse>, AppError> {
-    let shops = sqlx::query_as(
+    let me = sqlx::query_as(
         r#"
-        SELECT shops.id, shops.name, shops.notify_previous AS "notify_previous: bool"
-        FROM shops
-        INNER JOIN shop_members
-            ON shops.id = shop_members.shop_id
-        WHERE shop_members.email = ?
-        ORDER BY shops.name
+        SELECT staffs.name, staffs.email
+        FROM staffs
+        WHERE staffs.email = ?
         "#,
     )
     .bind(&user.email)
-    .fetch_all(&state.pool)
+    .fetch_one(&state.pool)
     .await?;
 
-    Ok(Json(MeResponse {
-        email: user.email,
-        shops,
-    }))
+    Ok(Json(me))
 }

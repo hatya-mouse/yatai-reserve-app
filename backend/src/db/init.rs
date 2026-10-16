@@ -23,7 +23,22 @@ pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             shop_id TEXT NOT NULL,
             email TEXT NOT NULL,
+            is_admin BOOLEAN NOT NULL DEFAULT 0,
             UNIQUE(shop_id, email)
+        );
+        "#,
+    )
+    .execute(pool)
+    .await?;
+
+    // Initialize staffs table
+    // staffs stores the name and email addresses of each staff.
+    sqlx::query(
+        r#"
+        CREATE TABLE IF NOT EXISTS staffs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE
         );
         "#,
     )

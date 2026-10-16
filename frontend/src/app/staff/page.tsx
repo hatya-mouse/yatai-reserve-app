@@ -12,27 +12,30 @@ type Shop = {
     notify_previous: boolean;
 };
 
+type Shops = {
+    shops: Shop[];
+};
+
+type Me = {
+    name: string;
+    email: string;
+};
+
 function Loading() {
     return <p className="text-muted-foreground">読み込み中...</p>;
 }
 
 async function ShopList() {
-    const response = await staffApi("/staff/me");
+    const response = await staffApi("/staff/shops");
 
     if (response.status === 401 || response.status === 403) {
         redirect("/");
     }
-
     if (!response.ok) {
         throw new Error("ユーザー情報の取得に失敗しました");
     }
 
-    const me: {
-        email: string;
-        shops: Shop[];
-    } = await response.json();
-
-    const shops = me.shops;
+    const shops = ((await response.json()) as Shops).shops;
 
     return (
         <section className="space-y-4">
@@ -75,17 +78,31 @@ async function ShopList() {
     );
 }
 
-export default function StaffPage() {
+export default async function StaffPage() {
+    const response = await staffApi("/staff/me");
+
+    if (response.status === 401 || response.status === 403) {
+        redirect("/");
+    }
+    if (!response.ok) {
+        throw new Error("ユーザー情報の取得に失敗しました");
+    }
+
+    const me: Me = await response.json();
+
     return (
         <main className="mx-auto min-h-svh w-full max-w-4xl space-y-6 px-4 py-8">
             <header className="flex items-center justify-between gap-4">
                 <h1 className="text-2xl font-bold">屋台管理</h1>
 
-                <form action={signOut}>
-                    <Button type="submit" variant="outline">
-                        サインアウト
-                    </Button>
-                </form>
+                <div className="flex flex-row gap-4">
+                    {me.name}
+                    <form action={signOut}>
+                        <Button type="submit" variant="outline">
+                            サインアウト
+                        </Button>
+                    </form>
+                </div>
             </header>
 
             <Suspense fallback={<Loading />}>
