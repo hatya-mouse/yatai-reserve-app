@@ -1,9 +1,10 @@
+import { Suspense } from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { serverApi } from "@/lib/api";
 import SignInForm from "./sign-in-form";
 
-export default async function Home() {
+async function AuthCheck() {
     const token = (await cookies()).get("session")?.value;
 
     if (token) {
@@ -22,4 +23,12 @@ export default async function Home() {
     }
 
     return <SignInForm />;
+}
+
+export default function Home() {
+    return (
+        <Suspense fallback={<p>読み込み中...</p>}>
+            <AuthCheck />
+        </Suspense>
+    );
 }
