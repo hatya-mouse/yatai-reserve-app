@@ -4,7 +4,7 @@ use sqlx::SqlitePool;
 #[derive(Debug, Clone)]
 pub(super) struct AppState {
     pub(super) pool: SqlitePool,
-    pub(super) verification_url: String,
+    pub(super) config: Config,
 }
 
 /// The configuration of the backend.
@@ -18,6 +18,8 @@ pub(super) struct Config {
     pub(super) database_url: String,
     /// The URL of the verification page of the frontend.
     pub(super) verification_url: String,
+    /// The URL that the staff is redirected to after verification.
+    pub(super) home_url: String,
 }
 
 impl Config {
@@ -30,6 +32,7 @@ impl Config {
                 .expect("Port number must be an unsigned 16 bit integer"),
             database_url: std::env::var("DATABASE_URL").unwrap_or_default(),
             verification_url: std::env::var("VERIFICATION_URL").unwrap_or_default(),
+            home_url: std::env::var("HOME_URL").unwrap_or_default(),
         }
     }
 }

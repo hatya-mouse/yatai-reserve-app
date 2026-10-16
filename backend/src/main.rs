@@ -42,17 +42,14 @@ async fn main() {
     println_info("Starting the server...");
 
     // Start the server
-    let state = AppState {
-        pool,
-        verification_url: config.verification_url,
-    };
+    let address = format!("{}:{}", config.host, config.port);
+    let listener = tokio::net::TcpListener::bind(address).await.unwrap();
+
+    let state = AppState { pool, config };
     let app = Router::new()
         .route("/request-signin", post(handlers::request_signin))
         .route("/verify", get(handlers::verify))
         .with_state(state);
-
-    let address = format!("{}:{}", config.host, config.port);
-    let listener = tokio::net::TcpListener::bind(address).await.unwrap();
 
     println_info(format!("Listening on {}", listener.local_addr().unwrap()));
     axum::serve(listener, app).await.ok();
