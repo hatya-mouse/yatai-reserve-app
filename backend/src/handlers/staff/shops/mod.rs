@@ -1,71 +1,62 @@
-mod add_shop_member;
-mod get_shop;
-mod reservations;
-mod update_shop;
+mod add_member;
+mod create;
+mod get;
+mod get_members;
+pub(crate) mod reservations;
+mod update;
 
-pub(crate) use add_shop_member::add_shop_member;
-pub(crate) use get_shop::get_shop;
-pub(crate) use update_shop::update_shop;
+pub(crate) use add_member::add_member;
+pub(crate) use create::create;
+pub(crate) use get::get;
+pub(crate) use get_members::get_members;
+pub(crate) use update::update;
 
-use crate::{
-    AppState,
-    data_types::{AuthUser, ShopResponse},
-    error::AppError,
+use crate::{data_types::AuthUser, error::AppError};
+use axum::{
+    extract::{Request, State},
+    middleware::Next,
+    response::Response,
 };
-use axum::{Extension, Json, extract::State};
-use serde::Deserialize;
-use uuid::Uuid;
+use sqlx::SqlitePool;
 
-#[derive(Debug, Deserialize)]
-pub(crate) struct CreateShopRequest {
-    name: String,
-    #[serde(default)]
-    notify_previous: bool,
-}
+pub(crate) async fn shop_member_middleware(
+    State(pool): State<SqlitePool>,
+    request: Request,
+    next: Next,
+) -> Result<Response, AppError> {
+    let shop_id = request
+        .uri()
+        .path()
+        .split('/')
+        .collect::<Vec<_>>()
+        .windows(2)
+        .find_map(|parts| (parts[0] == "shops").then_some(parts[1]))
+        .filter(|id| !id.is_empty())
+        .ok_or(AppError::BadRequest)?;
 
-pub(crate) async fn create_shop(
-    State(state): State<AppState>,
-    Extension(user): Extension<AuthUser>,
-    Json(body): Json<CreateShopRequest>,
-) -> Result<Json<ShopResponse>, AppError> {
-    let name = body.name.trim();
+    let user = request
+        .extensions()
+        .get::<AuthUser>()
+        .ok_or(AppError::Unauthorized)?;
 
-    if name.is_empty() {
-        return Err(AppError::BadRequest);
+    let is_member: bool = sqlx::query_scalar(
+        r#"
+        SELECT EXISTS (
+            SELECT 1
+            FROM shop_members
+            WHERE shop_id = ?
+              AND email = ?
+        )
+        "#,
+    )
+    .bind(shop_id)
+    .bind(&user.email)
+    .fetch_one(&pool)
+    .await?;
+
+    if !is_member {
+        return Err(AppError::Forbidden);
     }
 
-    let shop_id = Uuid::new_v4().to_string();
-
-    let mut tx = state.pool.begin().await?;
-
-    sqlx::query(
-        r#"
-        INSERT INTO shops (id, name, notify_previous)
-        VALUES (?, ?, ?)
-        "#,
-    )
-    .bind(&shop_id)
-    .bind(name)
-    .bind(body.notify_previous)
-    .execute(&mut *tx)
-    .await?;
-
-    sqlx::query(
-        r#"
-        INSERT INTO shop_members (shop_id, email)
-        VALUES (?, ?)
-        "#,
-    )
-    .bind(&shop_id)
-    .bind(&user.email)
-    .execute(&mut *tx)
-    .await?;
-
-    tx.commit().await?;
-
-    Ok(Json(ShopResponse {
-        id: shop_id,
-        name: name.to_owned(),
-        notify_previous: body.notify_previous,
-    }))
+    Ok(next.run(request).await)
 }

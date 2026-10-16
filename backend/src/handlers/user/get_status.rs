@@ -1,6 +1,6 @@
 use crate::{
     AppState,
-    data_types::{ReservationItem, StatusResponse},
+    data_types::{StatusItem, StatusResponse},
     error::AppError,
     handlers::user::StatusQuery,
 };
@@ -16,10 +16,12 @@ pub(crate) async fn get_status(
     use chrono::Utc;
 
     let email: String = sqlx::query_scalar(
-        "SELECT email
-         FROM status_tokens
-         WHERE token = ?
-           AND expires_at > ?",
+        r#"
+        SELECT email
+            FROM status_tokens
+            WHERE token = ?
+            AND expires_at > ?
+        "#,
     )
     .bind(&query.token)
     .bind(Utc::now().timestamp())
@@ -27,11 +29,10 @@ pub(crate) async fn get_status(
     .await?
     .ok_or(AppError::NotFound)?;
 
-    let reservations = sqlx::query_as::<_, ReservationItem>(
+    let reservations = sqlx::query_as::<_, StatusItem>(
         r#"
         SELECT
             r.id,
-            r.email,
             r.status,
             r.created_at,
             CASE

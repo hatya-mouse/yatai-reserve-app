@@ -7,7 +7,7 @@ mod tui;
 mod utils;
 
 use crate::{
-    handlers::staff::auth_middleware,
+    handlers::staff::{auth_middleware, shops::shop_member_middleware},
     state::{AppState, Config},
     tui::println_info,
 };
@@ -49,18 +49,34 @@ async fn main() {
     let listener = tokio::net::TcpListener::bind(address).await.unwrap();
 
     let state = AppState { pool, config };
+    let shops_routes = Router::new()
+        .route(
+            "/",
+            get(handlers::staff::shops::get).patch(handlers::staff::shops::update),
+        )
+        .route(
+            "/members",
+            get(handlers::staff::shops::get_members).post(handlers::staff::shops::add_member),
+        )
+        .route(
+            "/reservations",
+            post(handlers::staff::shops::reservations::list),
+        )
+        .route(
+            "/reservations/{reservation_id}",
+            post(handlers::staff::shops::reservations::call)
+                .patch(handlers::staff::shops::reservations::update),
+        )
+        .route_layer(middleware::from_fn_with_state(
+            state.pool.clone(),
+            shop_member_middleware,
+        ));
+
     let staff_routes = Router::new()
         .route("/signout", post(handlers::staff::signout))
         .route("/me", post(handlers::staff::me))
-        .route("/shops", post(handlers::staff::shops::create_shop))
-        .route(
-            "/shops/{shop_id}",
-            get(handlers::staff::shops::get_shop).patch(handlers::staff::shops::update_shop),
-        )
-        .route(
-            "/shops/{shop_id}/members",
-            post(handlers::staff::shops::add_shop_member),
-        )
+        .route("/shops", post(handlers::staff::shops::create))
+        .nest("/shops/{shop_id}", shops_routes)
         .route_layer(middleware::from_fn_with_state(
             state.pool.clone(),
             auth_middleware,

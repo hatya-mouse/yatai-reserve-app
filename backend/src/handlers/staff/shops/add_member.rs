@@ -12,7 +12,7 @@ pub(crate) struct AddShopMemberRequest {
     email: String,
 }
 
-pub(crate) async fn add_shop_member(
+pub(crate) async fn add_member(
     State(state): State<AppState>,
     Extension(user): Extension<AuthUser>,
     Path(shop_id): Path<String>,

@@ -12,7 +12,7 @@ pub(crate) struct UpdateShopRequest {
     notify_previous: Option<bool>,
 }
 
-pub(crate) async fn update_shop(
+pub(crate) async fn update(
     State(state): State<AppState>,
     Extension(user): Extension<AuthUser>,
     Path(shop_id): Path<String>,

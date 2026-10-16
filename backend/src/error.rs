@@ -10,6 +10,7 @@ pub(crate) enum AppError {
     BadRequest,
     NotFound,
     Conflict,
+    Forbidden,
     SqlxError(sqlx::Error),
     Internal,
 }
@@ -33,6 +34,7 @@ impl IntoResponse for AppError {
             Self::BadRequest => StatusCode::BAD_REQUEST,
             Self::NotFound => StatusCode::NOT_FOUND,
             Self::Conflict => StatusCode::CONFLICT,
+            Self::Forbidden => StatusCode::FORBIDDEN,
             Self::SqlxError(error) => {
                 println_error(format!("Internal error: {error:#?}"));
                 StatusCode::INTERNAL_SERVER_ERROR

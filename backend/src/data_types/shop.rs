@@ -14,7 +14,6 @@ pub(crate) struct ShopMemberResponse {
 }
 
 #[derive(Debug, Serialize, FromRow)]
-pub(crate) struct ShopDetailResponse {
-    pub shop: ShopResponse,
+pub(crate) struct ShopMembersResponse {
     pub members: Vec<ShopMemberResponse>,
 }
