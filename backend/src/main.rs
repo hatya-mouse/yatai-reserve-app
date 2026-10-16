@@ -1,15 +1,16 @@
-mod crypto;
 mod db;
 mod handlers;
 mod state;
 mod tui;
+mod utils;
 
 use crate::{
+    handlers::auth::auth_middleware,
     state::{AppState, Config},
     tui::println_info,
 };
 use axum::{
-    Router,
+    Router, middleware,
     routing::{get, post},
 };
 use sqlx::sqlite::SqlitePoolOptions;
@@ -46,9 +47,17 @@ async fn main() {
     let listener = tokio::net::TcpListener::bind(address).await.unwrap();
 
     let state = AppState { pool, config };
+    let auth_routes = Router::new()
+        .route("/signout", post(handlers::auth::signout))
+        .route_layer(middleware::from_fn_with_state(
+            state.pool.clone(),
+            auth_middleware,
+        ));
+
     let app = Router::new()
         .route("/request-signin", post(handlers::request_signin))
         .route("/verify", get(handlers::verify))
+        .nest("/auth", auth_routes)
         .with_state(state);
 
     println_info(format!("Listening on {}", listener.local_addr().unwrap()));

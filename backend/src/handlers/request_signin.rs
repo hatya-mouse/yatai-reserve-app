@@ -1,7 +1,7 @@
 use crate::{
     AppState,
-    crypto::gen_secure_token,
     tui::{println_error, println_info},
+    utils::gen_secure_token,
 };
 use axum::{Json, extract::State, http::StatusCode, response::IntoResponse};
 use chrono::Utc;

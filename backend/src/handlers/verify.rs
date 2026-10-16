@@ -1,9 +1,9 @@
 use std::time::Duration;
 
 use crate::{
-    crypto::gen_secure_token,
     state::AppState,
     tui::{println_error, println_info},
+    utils::gen_secure_token,
 };
 use axum::{
     extract::{Query, State},
