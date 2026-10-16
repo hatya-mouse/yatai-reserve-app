@@ -10,14 +10,15 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import Link from "next/link";
-
-function Loading() {
-    return <p className="text-muted-foreground">読み込み中...</p>;
-}
+import { Me } from "@/lib/api";
 
 export default async function NewShopPage() {
     const me = await getMe();
 
+    return <NewShopPageContent me={me} />;
+}
+
+function NewShopPageContent({ me }: { me: Me }) {
     const [name, setName] = useState("");
     const [notifyPrevious, setNotifyPrevious] = useState(true);
     const [message, setMessage] = useState("");

@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { signOut } from "@/lib/signout";
 import { useState } from "react";
@@ -7,9 +5,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getMe } from "@/lib/me";
 import Link from "next/link";
+import { Me } from "@/lib/api";
 
 export default async function StaffPage() {
     const me = await getMe();
+
+    return <StaffPageContent me={me} />;
+}
+
+function StaffPageContent({ me }: { me: Me }) {
+    "use client";
 
     const [name, setName] = useState(me.name);
     const [message, setMessage] = useState("");
