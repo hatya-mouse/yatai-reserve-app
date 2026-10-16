@@ -1,0 +1,80 @@
+use sqlx::SqlitePool;
+
+pub(super) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
+    // Initialize shops table
+    // shops stores the configurations for each shops.
+    sqlx::query(
+        r#"
+        CREATE TABLE IF NOT EXISTS shops (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            notify_previous BOOLEAN NOT NULL DEFAULT 0
+        );
+        "#,
+    )
+    .execute(pool)
+    .await?;
+
+    // Initialize shop_members table
+    // shop_members stores the email addresses and the shop it that the address belongs to.
+    sqlx::query(
+        r#"
+        CREATE TABLE IF NOT EXISTS shop_members (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            shop_id TEXT NOT NULL,
+            email TEXT NOT NULL
+        )
+        "#,
+    )
+    .execute(pool)
+    .await?;
+
+    // Initialize auth_tokens table
+    // auth_tokens stores the currently active tokens for staffs sent over email.
+    sqlx::query(
+        r#"
+        CREATE TABLE IF NOT EXISTS auth_tokens (
+            token TEXT PRIMARY KEY,
+            email TEXT NOT NULL,
+            expires_at DATETIME NOT NULL,
+            used BOOLEAN NOT NULL DEFAULT 0
+        )
+        "#,
+    )
+    .execute(pool)
+    .await?;
+
+    // Initialize status_tokens table
+    // auth_tokens stores the currently active tokens sent over email for customers to check reservation status.
+    sqlx::query(
+        r#"
+        CREATE TABLE IF NOT EXISTS auth_tokens (
+            token TEXT PRIMARY KEY,
+            email TEXT NOT NULL,
+            expires_at DATETIME NOT NULL,
+            used BOOLEAN NOT NULL DEFAULT 0
+        )
+        "#,
+    )
+    .execute(pool)
+    .await?;
+
+    // Initialize reservations table
+    // reservations stores all information of each reservations.
+    sqlx::query(
+        r#"
+        CREATE TABLE IF NOT EXISTS reservations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            shop_id TEXT NOT NULL,
+            email TEXT NOT NULL,
+            token TEXT NOT NULL,
+            status TEXT NOT NULL DEFAULT 'waiting',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+        "#,
+    )
+    .execute(pool)
+    .await?;
+
+    Ok(())
+}
