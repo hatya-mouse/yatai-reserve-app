@@ -60,7 +60,7 @@ async fn main() {
         )
         .route(
             "/reservations",
-            post(handlers::staff::shops::reservations::list),
+            get(handlers::staff::shops::reservations::list),
         )
         .route(
             "/reservations/{reservation_id}",
@@ -74,7 +74,7 @@ async fn main() {
 
     let staff_routes = Router::new()
         .route("/signout", post(handlers::staff::signout))
-        .route("/me", post(handlers::staff::me))
+        .route("/me", get(handlers::staff::me))
         .route("/shops", post(handlers::staff::shops::create))
         .nest("/shops/{shop_id}", shops_routes)
         .route_layer(middleware::from_fn_with_state(
