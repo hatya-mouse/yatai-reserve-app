@@ -16,7 +16,7 @@ pub(crate) struct ReservationStatusItem {
     reservation_id: i64,
     shop_id: String,
     shop_name: String,
-    status: String,
+    is_called: bool,
     position: Option<i64>,
     created_at: i64,
 }
@@ -49,13 +49,13 @@ pub(crate) async fn get_status(
     .ok_or(AppError::NotFound)?;
 
     // Get all reservations
-    let rows = sqlx::query_as::<_, (i64, String, String, String, i64)>(
+    let rows = sqlx::query_as::<_, (i64, String, String, bool, i64)>(
         r#"
         SELECT
             reservations.id,
             reservations.shop_id,
             shops.name,
-            reservations.status,
+            reservations.is_called,
             reservations.created_at
         FROM reservations
         INNER JOIN shops ON shops.id = reservations.shop_id
@@ -69,19 +69,21 @@ pub(crate) async fn get_status(
 
     let mut reservations = Vec::with_capacity(rows.len());
 
-    for (reservation_id, shop_id, shop_name, status, created_at) in rows {
-        let position = if status == "waiting" {
+    for (reservation_id, shop_id, shop_name, is_called, created_at) in rows {
+        let position = if is_called {
+            None
+        } else {
             let count = sqlx::query_scalar::<_, i64>(
                 r#"
-                SELECT COUNT(*)
-                FROM reservations
-                WHERE shop_id = ?
-                  AND status = 'waiting'
-                  AND (
-                      created_at < ?
-                      OR (created_at = ? AND id < ?)
-                  )
-                "#,
+                            SELECT COUNT(*)
+                            FROM reservations
+                            WHERE shop_id = ?
+                              AND is_called
+                              AND (
+                                  created_at < ?
+                                  OR (created_at = ? AND id < ?)
+                              )
+                            "#,
             )
             .bind(&shop_id)
             .bind(created_at)
@@ -91,15 +93,13 @@ pub(crate) async fn get_status(
             .await?;
 
             Some(count + 1)
-        } else {
-            None
         };
 
         reservations.push(ReservationStatusItem {
             reservation_id,
             shop_id,
             shop_name,
-            status,
+            is_called,
             position,
             created_at,
         });
