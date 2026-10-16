@@ -2,14 +2,13 @@ mod config;
 mod db;
 mod handlers;
 
-use std::time::Duration;
-
 use crate::config::Config;
 use axum::{
     Router,
     routing::{get, post},
 };
 use sqlx::sqlite::SqlitePoolOptions;
+use std::time::Duration;
 
 #[tokio::main]
 async fn main() {
@@ -25,6 +24,11 @@ async fn main() {
         .connect(&config.database_url)
         .await
         .expect("could not connect to the database");
+
+    // Initialize the database
+    db::init_db(&pool)
+        .await
+        .expect("could not initialize the database");
 
     // Start the server
     let app = Router::new()
