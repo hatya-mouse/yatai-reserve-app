@@ -1,14 +1,10 @@
 use crate::{error::AppError, state::AppState, tui::println_info, utils::gen_secure_token};
 use axum::{
+    Json,
     extract::{Query, State},
-    http::{
-        HeaderValue, StatusCode,
-        header::{LOCATION, SET_COOKIE},
-    },
-    response::IntoResponse,
 };
 use chrono::Utc;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use sqlx::prelude::FromRow;
 use std::time::Duration;
 
@@ -22,10 +18,15 @@ struct AuthToken {
     email: String,
 }
 
+#[derive(Serialize)]
+pub(crate) struct SessionData {
+    token: String,
+}
+
 pub(crate) async fn verify(
     State(state): State<AppState>,
     Query(params): Query<VerifyParams>,
-) -> Result<impl IntoResponse, AppError> {
+) -> Result<Json<SessionData>, AppError> {
     println_info("Verification requested with token");
 
     // Get the email associated with the token
@@ -60,20 +61,7 @@ pub(crate) async fn verify(
         .execute(&state.pool)
         .await?;
 
-    // Return the cookie with the new session token
-    let cookie = format!(
-        "session={}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age={}",
-        session_token,
-        24 * 60 * 60
-    );
-    let mut response = StatusCode::SEE_OTHER.into_response();
-
-    response
-        .headers_mut()
-        .insert(SET_COOKIE, HeaderValue::from_str(&cookie)?);
-    response
-        .headers_mut()
-        .insert(LOCATION, HeaderValue::from_str(&state.config.home_url)?);
-
-    Ok(response)
+    Ok(Json(SessionData {
+        token: session_token,
+    }))
 }
