@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
+import Link from "next/link";
 
 function Loading() {
     return <p className="text-muted-foreground">読み込み中...</p>;
@@ -52,7 +53,7 @@ export default async function NewShopPage() {
                 <h1 className="text-2xl font-bold">屋台を作成</h1>
 
                 <div className="flex flex-row gap-4">
-                    {me.name}
+                    <Link href="/staff/me">{me.name}</Link>
                     <form action={signOut}>
                         <Button type="submit" variant="outline">
                             サインアウト

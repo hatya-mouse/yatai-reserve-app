@@ -81,7 +81,7 @@ export default async function StaffPage() {
                 <h1 className="text-2xl font-bold">屋台管理</h1>
 
                 <div className="flex flex-row gap-4">
-                    {me.name}
+                    <Link href="/staff/me">{me.name}</Link>
                     <form action={signOut}>
                         <Button type="submit" variant="outline">
                             サインアウト

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getMe } from "@/lib/me";
+import Link from "next/link";
 
 export default async function StaffPage() {
     const me = await getMe();
@@ -44,7 +45,7 @@ export default async function StaffPage() {
                 <h1 className="text-2xl font-bold">ユーザの設定</h1>
 
                 <div className="flex flex-row gap-4">
-                    {me.name}
+                    <Link href="/staff/me">{me.name}</Link>
                     <form action={signOut}>
                         <Button type="submit" variant="outline">
                             サインアウト
