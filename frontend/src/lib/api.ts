@@ -14,9 +14,13 @@ export async function serverApi(
     const headers = new Headers(init.headers);
     headers.set("Authorization", `Bearer ${token}`);
 
-    return fetch(`${process.env.BACKEND_URL}${path}`, {
+    const response = await fetch(`${process.env.BACKEND_URL}${path}`, {
         ...init,
         headers,
         cache: "no-store",
     });
+
+    console.log(`[serverApi] ${path}: ${response.status}`);
+
+    return response;
 }
