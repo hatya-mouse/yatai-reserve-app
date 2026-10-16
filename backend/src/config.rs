@@ -3,6 +3,8 @@ pub(super) struct Config {
     pub(super) host: String,
     /// The port for the server to listen on.
     pub(super) port: u16,
+    /// An URL to the SQLite database.
+    pub(super) database_url:
 }
 
 impl Config {
