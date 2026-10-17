@@ -58,6 +58,5 @@ pub(crate) async fn create(
         id: shop_id,
         name: name.to_owned(),
         notify_previous: body.notify_previous,
-        is_admin: true,
     }))
 }

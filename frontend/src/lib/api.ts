@@ -17,6 +17,16 @@ export type Me = {
     email: string;
 };
 
+export type Member = {
+    name: string;
+    email: string;
+    is_admin: boolean;
+};
+
+export type Members = {
+    members: Member[];
+};
+
 export async function staffApi(path: string, init: RequestInit = {}) {
     const token = (await cookies()).get("session")?.value;
 

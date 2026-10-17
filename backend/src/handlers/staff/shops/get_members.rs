@@ -14,10 +14,15 @@ pub(crate) async fn get_members(
 ) -> Result<Json<ShopMembersResponse>, AppError> {
     let members = sqlx::query_as::<_, ShopMemberResponse>(
         r#"
-        SELECT email
+        SELECT
+            shop_members.email,
+            shop_members.is_admin,
+            staffs.name
         FROM shop_members
-        WHERE shop_id = ?
-        ORDER BY email
+        LEFT JOIN staffs
+            ON shop_members.email = staffs.email
+        WHERE shop_members.shop_id = ?
+        ORDER BY shop_members.email;
         "#,
     )
     .bind(&shop_id)
