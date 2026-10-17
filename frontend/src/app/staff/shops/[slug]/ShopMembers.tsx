@@ -89,7 +89,7 @@ export function ShopMembers({
         });
     }
 
-    function handleRemove(memberEmail: string) {
+    async function handleRemove(memberEmail: string) {
         if (memberEmail.toLowerCase() === currentUserEmail.toLowerCase()) {
             setMessage("自分自身を削除することはできません。");
             return;
@@ -101,27 +101,24 @@ export function ShopMembers({
 
         setMessage("");
 
-        startTransition(async () => {
-            try {
-                const response = await removeMember(shopId, memberEmail);
+        try {
+            const response = await removeMember(shopId, memberEmail);
 
-                console.log("removeMember status:", response.status);
-                console.log("removeMember ok:", response.ok);
+            console.log("removeMember status:", response.status);
 
-                if (!response.ok) {
-                    const body = await response.text();
-                    console.error("removeMember error:", body);
-                    setMessage(`メンバーの削除に失敗しました（HTTP ${response.status}）。`);
-                    return;
-                }
-
-                setMessage("メンバーを削除しました。");
-                router.refresh();
-            } catch (error) {
-                console.error("removeMember exception:", error);
-                setMessage("メンバーの削除に失敗しました。もう一度お試しください。");
+            if (!response.ok) {
+                const body = await response.text();
+                console.error("removeMember error:", body);
+                setMessage(`メンバーの削除に失敗しました（HTTP ${response.status}）。`);
+                return;
             }
-        });
+
+            setMessage("メンバーを削除しました。");
+            router.refresh();
+        } catch (error) {
+            console.error("removeMember exception:", error);
+            setMessage("メンバーの削除に失敗しました。もう一度お試しください。");
+        }
     }
 
     return (
