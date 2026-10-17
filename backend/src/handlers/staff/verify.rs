@@ -62,11 +62,22 @@ pub(crate) async fn verify(
         .await?;
 
     // If the email is not registered to staffs, generate a new name and add it
-    sqlx::query("INSERT INTO IF NOT EXISTS staffs (name, email) VALUES (?, ?)")
-        .bind("ユーザ")
-        .bind(&record.email)
-        .execute(&state.pool)
-        .await?;
+    sqlx::query(
+        r#"
+        INSERT INTO staffs (email, name)
+        SELECT ?, ?
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM staffs
+            WHERE email = ?
+        );
+        "#,
+    )
+    .bind(&record.email)
+    .bind("ユーザ")
+    .bind(&record.email)
+    .execute(&state.pool)
+    .await?;
 
     Ok(Json(SessionData {
         token: session_token,
