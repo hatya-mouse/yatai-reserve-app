@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import StaffHeader from "../../staff-header";
-import { useRouter } from "next/router";
 import { getMembers, getShop } from "@/lib/shop";
 import { getMe } from "@/lib/me";
 
@@ -9,7 +8,8 @@ function Loading() {
     return <p className="text-muted-foreground">読み込み中...</p>;
 }
 
-async function ShopContent({ slug }: { slug: string }) {
+async function ShopContent({ params }: { params: Promise<{ slug: string }> }) {
+    const slug = (await params).slug;
     const me = await getMe();
     const shop = await getShop(slug);
     const members = await getMembers(slug);
@@ -84,23 +84,16 @@ async function ShopContent({ slug }: { slug: string }) {
     );
 }
 
-export default function ShopPage() {
-    const router = useRouter();
-    const slug = router.query.slug;
-
-    if (typeof slug === "string") {
-        return (
-            <main className="mx-auto min-h-svh w-full max-w-4xl space-y-6 px-4 py-8">
-                <Suspense fallback={<Loading />}>
-                    <ShopContent slug={slug} />
-                </Suspense>
-            </main>
-        );
-    } else {
-        return (
-            <main className="mx-auto min-h-svh w-full max-w-4xl space-y-6 px-4 py-8">
-                slug was not found
-            </main>
-        );
-    }
+export default function ShopPage({
+    params,
+}: {
+    params: Promise<{ slug: string }>;
+}) {
+    return (
+        <main className="mx-auto min-h-svh w-full max-w-4xl space-y-6 px-4 py-8">
+            <Suspense fallback={<Loading />}>
+                <ShopContent params={params} />
+            </Suspense>
+        </main>
+    );
 }
