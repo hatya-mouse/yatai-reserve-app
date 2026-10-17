@@ -5,6 +5,8 @@ import { getMembers, getShop } from "@/lib/shop";
 import { getMe } from "@/lib/me";
 import { ShopMembers } from "./ShopMembers";
 import Loading from "@/app/loading";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 async function ShopContent({ params }: { params: Promise<{ slug: string }> }) {
     const slug = (await params).slug;
@@ -49,8 +51,14 @@ async function ShopContent({ params }: { params: Promise<{ slug: string }> }) {
                 </div>
             </section>
 
+            <div className="flex flex-wrap gap-3">
+                <Link href={`/staff/shops/${shop.id}/reservations`}>
+                    <Button>予約一覧</Button>
+                </Link>
+            </div>
+
             {/* Member List */}
-            <ShopMembers shopId={slug} members={members} />
+            <ShopMembers shopId={shop.id} members={members} />
         </div>
     );
 }

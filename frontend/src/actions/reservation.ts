@@ -1,6 +1,6 @@
 "use server";
 
-import { fetchBackend } from "@/lib/api";
+import { authApi, fetchBackend } from "@/lib/api";
 
 export async function reserve(shop_id: string, email: string) {
     return await fetchBackend(`/user/shops/${shop_id}/reserve`, {
@@ -47,4 +47,37 @@ export async function getStatus(token: string) {
             },
         })
     ).ok;
+}
+
+export async function updateReservation(
+    shopId: string,
+    reservationId: number,
+    status: "waiting" | "called" | "cancelled" | "completed",
+): Promise<boolean> {
+    const response = await authApi(
+        `/staff/shops/${shopId}/reservations/${reservationId}`,
+        {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ status }),
+        },
+    );
+
+    return response.ok;
+}
+
+export async function callReservation(
+    shopId: string,
+    reservationId: number,
+): Promise<boolean> {
+    const response = await authApi(
+        `/staff/shops/${shopId}/reservations/${reservationId}`,
+        {
+            method: "POST",
+        },
+    );
+
+    return response.ok;
 }
