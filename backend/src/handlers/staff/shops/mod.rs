@@ -15,7 +15,7 @@ pub(crate) use update::update;
 
 use crate::{data_types::AuthUser, error::AppError};
 use axum::{
-    extract::{Request, State},
+    extract::{OriginalUri, Request, State},
     middleware::Next,
     response::Response,
 };
@@ -27,13 +27,17 @@ pub(crate) async fn shop_member_middleware(
     next: Next,
 ) -> Result<Response, AppError> {
     let shop_id = request
-        .uri()
-        .path()
-        .split('/')
-        .collect::<Vec<_>>()
-        .windows(2)
-        .find_map(|parts| (parts[0] == "shops").then_some(parts[1]))
-        .filter(|id| !id.is_empty())
+        .extensions()
+        .get::<OriginalUri>()
+        .and_then(|uri| {
+            uri.0
+                .path()
+                .split('/')
+                .collect::<Vec<_>>()
+                .windows(2)
+                .find_map(|parts| (parts[0] == "shops").then_some(parts[1]))
+                .filter(|id| !id.is_empty())
+        })
         .ok_or(AppError::BadRequest)?;
 
     let user = request
