@@ -21,7 +21,7 @@ pub(crate) async fn list(
             shops.id,
             shops.name,
             shops.notify_previous AS "notify_previous: bool",
-            shops.is_admin AS "is_admin: bool"
+            shop_members.is_admin AS "is_admin: bool"
         FROM shops
         INNER JOIN shop_members
             ON shops.id = shop_members.shop_id
