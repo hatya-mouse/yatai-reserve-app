@@ -18,7 +18,7 @@ export default function SignInForm() {
         setLoading(true);
         setMessage("");
 
-        if (requestSignin(email)) {
+        if (await requestSignin(email)) {
             setMessage(
                 "サインインリンクを送信しました。メールを確認してください。",
             );
