@@ -15,7 +15,7 @@ pub(crate) async fn set_name(
     sqlx::query(
         r#"
         UPDATE staffs
-        SET name = COALESCE(?, name)
+        SET name = ?
         WHERE email = ?
         "#,
     )
