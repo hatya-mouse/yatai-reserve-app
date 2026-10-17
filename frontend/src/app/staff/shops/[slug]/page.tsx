@@ -7,6 +7,7 @@ import { ShopMembers } from "./ShopMembers";
 import Loading from "@/app/loading";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { DeleteShopButton } from "./DeleteShopButton";
 
 async function ShopContent({ params }: { params: Promise<{ slug: string }> }) {
     const slug = (await params).slug;
@@ -15,6 +16,13 @@ async function ShopContent({ params }: { params: Promise<{ slug: string }> }) {
     const members = await getMembers(slug);
 
     if (!me || !shop || !members) redirect("/");
+
+    // Check if the current user is an admin
+    const currentMember = members.members.find(
+        (member) =>
+            member.email.toLowerCase() === me.email.toLowerCase(),
+    );
+    const isAdmin = currentMember?.is_admin === true;
 
     return (
         <div className="space-y-6">
@@ -58,7 +66,17 @@ async function ShopContent({ params }: { params: Promise<{ slug: string }> }) {
             </div>
 
             {/* Member List */}
-            <ShopMembers shopId={shop.id} members={members} />
+            <ShopMembers
+                shopId={shop.id}
+                members={members}
+                currentUserEmail={me.email}
+                isAdmin={isAdmin}
+            />
+
+            <section className="space-y-3">
+                <h2 className="text-xl font-semibold">管理者ゾーン</h2>
+                <DeleteShopButton shopId={shop.id} shopName={shop.name} />
+            </section>
         </div>
     );
 }

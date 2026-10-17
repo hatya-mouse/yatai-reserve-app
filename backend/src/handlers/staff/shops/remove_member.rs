@@ -20,7 +20,7 @@ pub(crate) async fn remove_member(
 ) -> Result<StatusCode, AppError> {
     let email = body.email.trim().to_ascii_lowercase();
 
-    if email.is_empty() || !email.contains('@') {
+    if email.is_empty() || !email.contains('@') || email == user.email.trim().to_ascii_lowercase() {
         return Err(AppError::BadRequest);
     }
 
