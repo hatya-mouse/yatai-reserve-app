@@ -26,7 +26,7 @@ async function NewShopContent() {
 
 export default function NewShopPage() {
     return (
-        <main className="mx-auto min-h-svh w-full max-w-4xl space-y-6 px-4 py-8">
+        <main className="mx-auto min-h-svh w-full max-w-4xl space-y-6 px-4 py-4">
             <Suspense fallback={<Loading />}>
                 <NewShopContent />
             </Suspense>

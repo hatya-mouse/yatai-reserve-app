@@ -71,7 +71,7 @@ function ShopList({ shops }: { shops: Shop[] }) {
 
 export default function StaffPage() {
     return (
-        <main className="mx-auto min-h-svh w-full max-w-4xl space-y-6 px-4 py-8">
+        <main className="mx-auto min-h-svh w-full max-w-4xl space-y-6 px-4 py-4">
             <Suspense fallback={<Loading />}>
                 <StaffContent />
             </Suspense>
