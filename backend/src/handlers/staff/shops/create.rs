@@ -43,8 +43,8 @@ pub(crate) async fn create(
 
     sqlx::query(
         r#"
-        INSERT INTO shop_members (shop_id, email)
-        VALUES (?, ?)
+        INSERT INTO shop_members (shop_id, email, is_admin)
+        VALUES (?, ?, 1)
         "#,
     )
     .bind(&shop_id)
@@ -58,5 +58,6 @@ pub(crate) async fn create(
         id: shop_id,
         name: name.to_owned(),
         notify_previous: body.notify_previous,
+        is_admin: true,
     }))
 }

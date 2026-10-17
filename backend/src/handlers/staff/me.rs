@@ -3,7 +3,7 @@ use axum::{Extension, Json, extract::State};
 use serde::Serialize;
 use sqlx::prelude::FromRow;
 
-#[derive(Serialize)]
+#[derive(Serialize, FromRow)]
 pub(crate) struct MeResponse {
     name: String,
     email: String,

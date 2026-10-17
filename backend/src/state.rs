@@ -22,8 +22,6 @@ pub(super) struct Config {
     /// The URL of the verification page of the frontend for customers.
     /// Example: "https://example.com/status?token="
     pub(super) status_url: String,
-    /// The URL that the staff is redirected to after verification.
-    pub(super) home_url: String,
     /// Resend API key to send emails.
     pub(super) resend_key: String,
     /// An email address to send emails from.
@@ -41,7 +39,6 @@ impl Config {
             database_url: std::env::var("DATABASE_URL").unwrap_or_default(),
             verification_url: std::env::var("VERIFICATION_URL").unwrap_or_default(),
             status_url: std::env::var("STATUS_URL").unwrap_or_default(),
-            home_url: std::env::var("HOME_URL").unwrap_or_default(),
             resend_key: std::env::var("RESEND_KEY").unwrap_or_default(),
             email: std::env::var("EMAIL").unwrap_or_default(),
         }

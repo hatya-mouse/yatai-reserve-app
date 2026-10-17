@@ -1,19 +1,14 @@
-use crate::{AppState, data_types::AuthUser, error::AppError};
+use crate::{
+    AppState,
+    data_types::{AuthUser, ShopResponse},
+    error::AppError,
+};
 use axum::{Extension, Json, extract::State};
 use serde::Serialize;
-use sqlx::prelude::FromRow;
 
 #[derive(Serialize)]
 pub(crate) struct ListResponse {
     shops: Vec<ShopResponse>,
-}
-
-#[derive(Serialize, FromRow)]
-pub(crate) struct ShopResponse {
-    id: String,
-    name: String,
-    notify_previous: bool,
-    is_admin: bool,
 }
 
 pub(crate) async fn list(

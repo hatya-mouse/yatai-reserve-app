@@ -1,12 +1,10 @@
 use crate::{AppState, data_types::AuthUser, error::AppError};
 use axum::{Extension, Json, extract::State, http::StatusCode};
-use serde::Serialize;
-use sqlx::prelude::FromRow;
+use serde::{Deserialize, Serialize};
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub(crate) struct SetNameRequest {
     name: String,
-    email: String,
 }
 
 pub(crate) async fn set_name(
@@ -23,7 +21,7 @@ pub(crate) async fn set_name(
         "#,
     )
     .bind(body.name.trim())
-    .bind(&body.email)
+    .bind(&user.email)
     .execute(&state.pool)
     .await?;
 

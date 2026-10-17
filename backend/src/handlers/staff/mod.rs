@@ -1,4 +1,3 @@
-mod list;
 mod me;
 mod request_signin;
 mod set_name;
@@ -6,7 +5,6 @@ pub(crate) mod shops;
 mod signout;
 mod verify;
 
-pub(crate) use list::list;
 pub(crate) use me::me;
 pub(crate) use request_signin::request_signin;
 pub(crate) use set_name::set_name;

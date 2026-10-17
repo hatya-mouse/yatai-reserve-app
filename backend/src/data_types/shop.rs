@@ -6,6 +6,7 @@ pub(crate) struct ShopResponse {
     pub id: String,
     pub name: String,
     pub notify_previous: bool,
+    pub is_admin: bool,
 }
 
 #[derive(Debug, Serialize, FromRow)]

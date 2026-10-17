@@ -2,6 +2,7 @@ mod add_member;
 mod create;
 mod get;
 mod get_members;
+mod list;
 pub(crate) mod reservations;
 mod update;
 
@@ -9,6 +10,7 @@ pub(crate) use add_member::add_member;
 pub(crate) use create::create;
 pub(crate) use get::get;
 pub(crate) use get_members::get_members;
+pub(crate) use list::list;
 pub(crate) use update::update;
 
 use crate::{data_types::AuthUser, error::AppError};
