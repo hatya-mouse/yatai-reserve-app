@@ -39,14 +39,15 @@ pub(crate) async fn reserve(
         return Err(AppError::NotFound);
     }
 
-    // Check if the reservation with the same email address exists
+    // Check if the waiting reservation with the same email address exists
     let reservation_exists = sqlx::query_scalar::<_, i64>(
         r#"
         SELECT EXISTS(
             SELECT 1
             FROM reservations
             WHERE shop_id = ?
-              AND email = ?
+                AND email = ?
+                AND status = 'waiting'
         )
         "#,
     )
