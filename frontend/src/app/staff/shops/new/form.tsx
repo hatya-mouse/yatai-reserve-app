@@ -6,10 +6,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function NewShopForm() {
+    const router = useRouter();
+
     const [name, setName] = useState("");
     const [notifyPrevious, setNotifyPrevious] = useState(true);
     const [message, setMessage] = useState("");
@@ -22,29 +24,32 @@ export function NewShopForm() {
 
         try {
             const response = await createNewShop(name, notifyPrevious);
-            console.log(response);
-            if (!response.ok) throw new Error("Shop addition failed");
 
-            redirect("/staff");
+            if (!response.ok) {
+                setMessage("屋台の追加に失敗しました。もう一度お試しください。");
+                return;
+            }
+
+            router.push("/staff");
+            router.refresh();
         } catch (error) {
-            console.log(error);
+            console.error("屋台の追加に失敗:", error);
             setMessage("屋台の追加に失敗しました。もう一度お試しください。");
+        } finally {
+            setLoading(false);
         }
-
-        setLoading(false);
     }
 
     return (
         <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="space-y-2">
-                <Label htmlFor="email">屋台名</Label>
+                <Label htmlFor="name">屋台名</Label>
                 <Input
                     id="name"
                     name="name"
-                    type="name"
                     value={name}
                     onChange={(event) => setName(event.target.value)}
-                    autoComplete="name"
+                    autoComplete="organization"
                     required
                 />
             </div>
@@ -52,7 +57,9 @@ export function NewShopForm() {
             <Field orientation="horizontal">
                 <Checkbox
                     checked={notifyPrevious}
-                    onCheckedChange={setNotifyPrevious}
+                    onCheckedChange={(checked) =>
+                        setNotifyPrevious(checked === true)
+                    }
                 />
                 <FieldLabel>直前の客が呼ばれた際に通知</FieldLabel>
                 <FieldDescription>
@@ -63,16 +70,13 @@ export function NewShopForm() {
             <Button
                 type="submit"
                 className="w-full"
-                disabled={loading || name == ""}
+                disabled={loading || name.trim() === ""}
             >
                 {loading ? "作成中..." : "屋台を作成"}
             </Button>
 
             {message && (
-                <p
-                    role="status"
-                    className="text-center text-sm text-muted-foreground"
-                >
+                <p role="status" className="text-center text-sm text-muted-foreground">
                     {message}
                 </p>
             )}
