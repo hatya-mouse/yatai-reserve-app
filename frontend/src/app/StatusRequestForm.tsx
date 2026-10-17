@@ -1,15 +1,9 @@
 "use client";
 
-import { Mail, Store } from "lucide-react";
+import { Mail } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { requestStatus } from "@/actions/reservation";
@@ -44,7 +38,7 @@ export default function StatusRequestForm() {
             <Card className="w-full max-w-md">
                 <CardHeader className="items-center text-center">
                     <CardTitle className="flex flex-row items-center justify-center gap-2 text-lg font-bold">
-                        <Store />
+                        <Mail />
                         予約状況の確認
                     </CardTitle>
                 </CardHeader>
