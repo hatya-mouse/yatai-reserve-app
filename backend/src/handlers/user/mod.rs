@@ -28,7 +28,7 @@ async fn send_status_email(state: &AppState, email: &str, token: &str) -> Result
     let config = &state.config;
     let link = format!("{}{}", config.status_url, token);
 
-    let subject = "予約状況の確認リンク";
+    let subject = "予約状況の確認";
     let html_content = format!(
         r#"
         <p>予約状況を確認するには、以下のリンクを開いてください。</p>

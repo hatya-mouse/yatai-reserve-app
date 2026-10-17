@@ -4,10 +4,7 @@ import StaffHeader from "../../staff-header";
 import { getMembers, getShop } from "@/lib/shop";
 import { getMe } from "@/lib/me";
 import { ShopMembers } from "./ShopMembers";
-
-function Loading() {
-    return <p className="text-muted-foreground">読み込み中...</p>;
-}
+import Loading from "@/app/loading";
 
 async function ShopContent({ params }: { params: Promise<{ slug: string }> }) {
     const slug = (await params).slug;

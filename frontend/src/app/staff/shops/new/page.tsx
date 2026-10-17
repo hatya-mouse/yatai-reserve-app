@@ -3,10 +3,7 @@ import { redirect } from "next/navigation";
 import { getMe } from "@/lib/me";
 import { NewShopForm } from "./form";
 import StaffHeader from "../../staff-header";
-
-function Loading() {
-    return <p className="text-muted-foreground">読み込み中...</p>;
-}
+import Loading from "@/app/loading";
 
 async function NewShopContent() {
     const me = await getMe();

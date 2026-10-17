@@ -6,10 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { getMe, getShops } from "@/lib/me";
 import StaffHeader from "./staff-header";
-
-function Loading() {
-    return <p className="text-muted-foreground">読み込み中...</p>;
-}
+import Loading from "../loading";
 
 async function StaffContent() {
     const me = await getMe();

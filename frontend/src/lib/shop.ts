@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import { Members, Shop, staffApi } from "./api";
 
-export async function getShop(shop_id: string) {
-    const response = await staffApi(`/staff/shops/${shop_id}`, {
+export async function getShop(shopId: string) {
+    const response = await staffApi(`/staff/shops/${shopId}`, {
         method: "GET",
     });
 
@@ -16,8 +16,8 @@ export async function getShop(shop_id: string) {
     return (await response.json()) as Shop;
 }
 
-export async function getMembers(shop_id: string) {
-    const response = await staffApi(`/staff/shops/${shop_id}/members`, {
+export async function getMembers(shopId: string) {
+    const response = await staffApi(`/staff/shops/${shopId}/members`, {
         method: "GET",
     });
 
