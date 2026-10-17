@@ -103,7 +103,7 @@ pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
         );
         CREATE UNIQUE INDEX IF NOT EXISTS
             idx_reversation_shop_email
-        ON reservation (shop_id, email);
+        ON reservations (shop_id, email);
         "#,
     )
     .execute(pool)
