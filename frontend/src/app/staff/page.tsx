@@ -1,31 +1,48 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
-import { staffApi, Shops, Me } from "@/lib/api";
+import { staffApi, type Me, type Shop } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { signOut } from "@/lib/signout";
 import Link from "next/link";
+import { getMe, getShops } from "@/lib/me";
 
 function Loading() {
     return <p className="text-muted-foreground">読み込み中...</p>;
 }
 
-async function ShopList() {
-    const response = await staffApi("/staff/shops");
+async function StaffContent() {
+    const me = await getMe();
+    const shops = await getShops();
+    if (!me || !shops) redirect("/");
 
-    if (response.status === 401 || response.status === 403) {
-        redirect("/");
-    }
-    if (!response.ok) {
-        throw new Error("ユーザー情報の取得に失敗しました");
-    }
+    return (
+        <>
+            <header className="flex items-center justify-between gap-4">
+                <h1 className="text-2xl font-bold">屋台管理</h1>
 
-    const shops = ((await response.json()) as Shops).shops;
+                <div className="flex items-center gap-4">
+                    <Link href="/staff/me">{me.name}</Link>
 
+                    <form action={signOut}>
+                        <Button type="submit" variant="outline">
+                            サインアウト
+                        </Button>
+                    </form>
+                </div>
+            </header>
+
+            <ShopList shops={shops.shops} />
+        </>
+    );
+}
+
+function ShopList({ shops }: { shops: Shop[] }) {
     return (
         <section className="space-y-4">
             <div className="flex items-center justify-between gap-4">
                 <h2 className="text-lg font-semibold">屋台一覧</h2>
+
                 <Link href="/staff/shops/new">
                     <Button>＋ 屋台を作成</Button>
                 </Link>
@@ -44,6 +61,7 @@ async function ShopList() {
                             <CardHeader>
                                 <CardTitle>{shop.name}</CardTitle>
                             </CardHeader>
+
                             <CardContent className="flex items-center justify-between gap-3">
                                 <span className="text-sm text-muted-foreground">
                                     {shop.notify_previous
@@ -63,35 +81,11 @@ async function ShopList() {
     );
 }
 
-export default async function StaffPage() {
-    const response = await staffApi("/staff/me");
-
-    if (response.status === 401 || response.status === 403) {
-        redirect("/");
-    }
-    if (!response.ok) {
-        throw new Error("ユーザー情報の取得に失敗しました");
-    }
-
-    const me: Me = await response.json();
-
+export default function StaffPage() {
     return (
         <main className="mx-auto min-h-svh w-full max-w-4xl space-y-6 px-4 py-8">
-            <header className="flex items-center justify-between gap-4">
-                <h1 className="text-2xl font-bold">屋台管理</h1>
-
-                <div className="flex flex-row gap-4">
-                    <Link href="/staff/me">{me.name}</Link>
-                    <form action={signOut}>
-                        <Button type="submit" variant="outline">
-                            サインアウト
-                        </Button>
-                    </form>
-                </div>
-            </header>
-
             <Suspense fallback={<Loading />}>
-                <ShopList />
+                <StaffContent />
             </Suspense>
         </main>
     );
