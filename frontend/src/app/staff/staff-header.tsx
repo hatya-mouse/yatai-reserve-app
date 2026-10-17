@@ -7,7 +7,7 @@ import { Home } from "lucide-react";
 export default function StaffHeader({ me }: { me: Me }) {
     return (
         <header className="flex items-center justify-between gap-4">
-            <Link href="/staff" className="text-xl font-bold">
+            <Link href="/staff" className="text-xl font-bold flex items-center">
                 <Home className="visible sm:invisible" />
                 <h1 className="invisible sm:visible">工嶺祭予約アプリ</h1>
             </Link>
