@@ -136,6 +136,7 @@ export function ShopMembers({
                     }
                 });
             }
+        });
     }
 
     return (
