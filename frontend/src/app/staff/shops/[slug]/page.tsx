@@ -19,8 +19,7 @@ async function ShopContent({ params }: { params: Promise<{ slug: string }> }) {
 
     // Check if the current user is an admin
     const currentMember = members.members.find(
-        (member) =>
-            member.email.toLowerCase() === me.email.toLowerCase(),
+        (member) => member.email.toLowerCase() === me.email.toLowerCase(),
     );
     const isAdmin = currentMember?.is_admin === true;
 
@@ -50,7 +49,7 @@ async function ShopContent({ params }: { params: Promise<{ slug: string }> }) {
 
                     <div className="flex items-center justify-between gap-4">
                         <span className="text-sm text-muted-foreground">
-                            予約用リンク
+                            予約用URL
                         </span>
                         <span className="font-mono text-sm">
                             https://reserve.hatya.dev/r/{shop.id}

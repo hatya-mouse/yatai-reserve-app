@@ -4,9 +4,16 @@ import { Mail, Store } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { requestSignin } from "@/actions/request-signin";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Link from "next/link";
 
 export default function SignInForm() {
     const [email, setEmail] = useState("");
@@ -40,6 +47,9 @@ export default function SignInForm() {
                         <Store />
                         運営者向けサインイン
                     </CardTitle>
+                    <CardDescription>
+                        <Link href="/">一般向けの予約状況確認はこちら</Link>
+                    </CardDescription>
                 </CardHeader>
 
                 <CardContent>

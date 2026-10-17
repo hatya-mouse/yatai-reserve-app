@@ -3,16 +3,18 @@
 import { authApi, fetchBackend } from "@/lib/api";
 
 export async function reserve(shop_id: string, email: string): Promise<number> {
-    return (await fetchBackend(`/user/shops/${shop_id}/reserve`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-    })).status;
+    return (
+        await fetchBackend(`/user/shops/${shop_id}/reserve`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email }),
+        })
+    ).status;
 }
 
-export async function request_status(email: string): Promise<boolean> {
+export async function requestStatus(email: string): Promise<boolean> {
     return (
         await fetchBackend("/user/request-status", {
             method: "POST",
@@ -24,7 +26,10 @@ export async function request_status(email: string): Promise<boolean> {
     ).ok;
 }
 
-export async function cancelReservation(reservation_id: string, token: string): Promise<boolean> {
+export async function cancelReservation(
+    reservation_id: string,
+    token: string,
+): Promise<boolean> {
     return (
         await fetchBackend(
             `/user/reservations/${reservation_id}/cancel?token=${token}`,
