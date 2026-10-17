@@ -43,7 +43,7 @@ export default function SignInForm() {
                     </CardTitle>
                 </CardHeader>
 
-                <CardContent>
+                <CardContent className="flex flex-col items-center">
                     <form className="space-y-4" onSubmit={handleSubmit}>
                         <div className="space-y-2">
                             <Label htmlFor="email">メールアドレス</Label>
@@ -80,7 +80,9 @@ export default function SignInForm() {
                         )}
                     </form>
 
-                    <Link href="/">一般向けの予約状況確認はこちら</Link>
+                    <Link href="/" className="mt-2">
+                        一般向けの予約状況確認はこちら
+                    </Link>
                 </CardContent>
             </Card>
         </main>
