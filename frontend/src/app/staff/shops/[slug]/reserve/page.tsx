@@ -25,7 +25,7 @@ export default async function ReservePage({
             <StaffHeader me={me} />
 
             <div>
-                <h1 className="text-2xl font-bold">予約管理</h1>
+                <h1 className="text-xl font-bold">予約管理</h1>
                 <p className="text-sm text-muted-foreground">{shop.name}</p>
             </div>
 
