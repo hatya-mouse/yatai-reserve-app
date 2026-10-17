@@ -23,7 +23,7 @@ export async function getReservationStatus(
     token: string,
 ): Promise<StatusResponse | null> {
     const response = await fetchBackend(
-        `/status?token=${encodeURIComponent(token)}`,
+        `/user/status?token=${encodeURIComponent(token)}`,
         { cache: "no-store" },
     );
 
