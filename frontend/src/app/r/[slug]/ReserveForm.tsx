@@ -33,6 +33,7 @@ export default function ReserveForm({ shop }: { shop: Shop }) {
                 setLoading(false);
                 return;
             } else if (status !== 200) {
+                console.log("Reservation", status);
                 throw new Error("Sign-in request failed");
             }
 
