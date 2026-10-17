@@ -3,6 +3,7 @@
 import { Mail, Store } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { requestSignin } from "@/actions/request-signin";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,27 +18,15 @@ export default function SignInForm() {
         setLoading(true);
         setMessage("");
 
-        try {
-            const response = await fetch("/api/request-signin", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ email }),
-            });
-
-            if (!response.ok) {
-                throw new Error("Request failed");
-            }
-
+        if (requestSignin(email)) {
             setMessage(
                 "サインインリンクを送信しました。メールを確認してください。",
             );
-        } catch {
+        } else {
             setMessage("送信に失敗しました。もう一度お試しください。");
-        } finally {
-            setLoading(false);
         }
+
+        setLoading(false);
     }
 
     return (

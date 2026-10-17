@@ -7,7 +7,7 @@ export async function createNewShop(
     notifyPrevious: boolean,
 ): Promise<boolean> {
     return (
-        await staffApi("/api/staff/shops", {
+        await staffApi("/staff/shops", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

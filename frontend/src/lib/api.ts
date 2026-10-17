@@ -27,7 +27,7 @@ export async function staffApi(path: string, init: RequestInit = {}) {
     const headers = new Headers(init.headers);
     headers.set("Authorization", `Bearer ${token}`);
 
-    const response = await fetch(`${process.env.BACKEND_URL}${path}`, {
+    const response = await fetchBackend(path, {
         ...init,
         headers,
         cache: "no-store",
@@ -36,4 +36,11 @@ export async function staffApi(path: string, init: RequestInit = {}) {
     console.log(`[staffApi] ${path}: ${response.status}`);
 
     return response;
+}
+
+export async function fetchBackend(path: string, init: RequestInit = {}) {
+    return await fetch(`${process.env.BACKEND_URL}${path}`, {
+        ...init,
+        cache: "no-store",
+    });
 }
