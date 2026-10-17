@@ -38,7 +38,8 @@ export default function ReserveForm({ shop }: { shop: Shop }) {
             }
 
             setMessage("予約を受け付けました。");
-        } catch {
+        } catch (error) {
+            console.log("Reservation error: ", error);
             setMessage("予約に失敗しました。もう一度お試しください。");
         }
 
