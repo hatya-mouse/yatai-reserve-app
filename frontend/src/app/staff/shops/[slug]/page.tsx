@@ -37,6 +37,15 @@ async function ShopContent({ params }: { params: Promise<{ slug: string }> }) {
                         </span>
                         <span className="font-mono text-sm">{shop.id}</span>
                     </div>
+
+                    <div className="flex items-center justify-between gap-4">
+                        <span className="text-sm text-muted-foreground">
+                            予約用リンク
+                        </span>
+                        <span className="font-mono text-sm">
+                            https://reserve.hatya.dev/r/{shop.id}/
+                        </span>
+                    </div>
                 </div>
             </section>
 
