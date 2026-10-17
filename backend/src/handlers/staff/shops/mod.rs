@@ -26,6 +26,8 @@ pub(crate) async fn shop_member_middleware(
     request: Request,
     next: Next,
 ) -> Result<Response, AppError> {
+    eprintln!("Request URI: {}", request.uri());
+    eprintln!("Request path: {}", request.uri().path());
     let shop_id = request
         .uri()
         .path()
