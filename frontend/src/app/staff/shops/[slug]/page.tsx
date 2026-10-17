@@ -18,7 +18,8 @@ async function ShopContent({ params }: { params: Promise<{ slug: string }> }) {
 
     return (
         <div className="space-y-6">
-            <StaffHeader me={me} title={shop.name} />
+            <StaffHeader me={me} />
+            <h2 className="text-xl font-bold">{shop.name}</h2>
 
             {/* Shop Information */}
             <section className="space-y-3">

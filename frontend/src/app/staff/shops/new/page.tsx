@@ -17,7 +17,8 @@ async function NewShopContent() {
 
     return (
         <>
-            <StaffHeader me={me} title="屋台の作成" />
+            <StaffHeader me={me} />
+            <h2 className="text-xl font-bold">屋台の作成</h2>
             <NewShopForm />
         </>
     );

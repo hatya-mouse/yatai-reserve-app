@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "工嶺祭屋台予約管理アプリ",
+    title: "工嶺祭予約アプリ",
     description: "",
 };
 

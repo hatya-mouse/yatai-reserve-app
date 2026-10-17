@@ -17,7 +17,8 @@ async function MeContent() {
 
     return (
         <>
-            <StaffHeader me={me} title="ユーザの設定" />
+            <StaffHeader me={me} />
+            <h2 className="text-xl font-bold">ユーザの設定</h2>
             <MeSettingsForm me={me} />
         </>
     );

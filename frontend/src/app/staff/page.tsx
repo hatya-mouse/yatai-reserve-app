@@ -18,7 +18,8 @@ async function StaffContent() {
 
     return (
         <>
-            <StaffHeader me={me} title="屋台管理" />
+            <StaffHeader me={me} />
+            <h2 className="text-xl font-bold">屋台管理</h2>
             <ShopList shops={shops.shops} />
         </>
     );
