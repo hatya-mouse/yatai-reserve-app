@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import StaffHeader from "../../staff-header";
 import { getMembers, getShop } from "@/lib/shop";
 import { getMe } from "@/lib/me";
+import { ShopMembers } from "./ShopMembers";
 
 function Loading() {
     return <p className="text-muted-foreground">読み込み中...</p>;
@@ -43,44 +44,7 @@ async function ShopContent({ params }: { params: Promise<{ slug: string }> }) {
             </section>
 
             {/* Member List */}
-            <section className="space-y-3">
-                <div className="flex items-center justify-between">
-                    <h2 className="text-xl font-semibold">メンバー</h2>
-                    <span className="text-sm text-muted-foreground">
-                        {members.members.length}人
-                    </span>
-                </div>
-
-                <div className="rounded-lg border divide-y">
-                    {members.members.map((member) => (
-                        <div
-                            key={member.email}
-                            className="flex items-center justify-between gap-3 p-4"
-                        >
-                            <div className="min-w-0 space-y-1">
-                                <p className="font-medium truncate">
-                                    {member.name || member.email}
-                                </p>
-                                <p className="text-sm text-muted-foreground break-all">
-                                    {member.email}
-                                </p>
-                            </div>
-
-                            {member.is_admin && (
-                                <span className="shrink-0 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                                    管理者
-                                </span>
-                            )}
-                        </div>
-                    ))}
-
-                    {members.members.length === 0 && (
-                        <p className="p-6 text-center text-sm text-muted-foreground">
-                            メンバーはいません。
-                        </p>
-                    )}
-                </div>
-            </section>
+            <ShopMembers shopId={slug} members={members} />
         </div>
     );
 }
