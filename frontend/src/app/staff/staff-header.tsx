@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function StaffHeader({ me }: { me: Me }) {
     return (
         <header className="flex items-center justify-between gap-4">
-            <Link href="/staff" className="hidden sm:visible">
+            <Link href="/staff" className="invisible sm:visible">
                 <h1 className="text-xl font-bold">工嶺祭予約アプリ</h1>
             </Link>
 
