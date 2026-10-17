@@ -20,11 +20,15 @@ export function NewShopForm() {
         setLoading(true);
         setMessage("");
 
-        if (await createNewShop(name, notifyPrevious)) {
+        try {
+            const success = await createNewShop(name, notifyPrevious);
+            if (!success) throw new Error("Shop addition failed");
+
             redirect("/staff");
-        } else {
+        } catch {
             setMessage("屋台の追加に失敗しました。もう一度お試しください。");
         }
+
         setLoading(false);
     }
 

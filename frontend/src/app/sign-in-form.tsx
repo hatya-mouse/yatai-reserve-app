@@ -18,11 +18,14 @@ export default function SignInForm() {
         setLoading(true);
         setMessage("");
 
-        if (await requestSignin(email)) {
+        try {
+            const success = await requestSignin(email);
+            if (!success) throw new Error("Sign-in request failed");
+
             setMessage(
                 "サインインリンクを送信しました。メールを確認してください。",
             );
-        } else {
+        } catch {
             setMessage("送信に失敗しました。もう一度お試しください。");
         }
 

@@ -17,9 +17,12 @@ export function MeSettingsForm({ me }: { me: Me }) {
         setLoading(true);
         setMessage("");
 
-        if (await setUserName(name)) {
+        try {
+            const success = await setUserName(name);
+            if (!success) throw new Error("Rename request failed");
+
             setMessage("名前を変更しました。");
-        } else {
+        } catch {
             setMessage("名前の変更に失敗しました。もう一度お試しください。");
         }
         setLoading(false);
