@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { staffApi } from "@/lib/api";
 import { redirect } from "next/navigation";
 import { useState } from "react";
 
@@ -20,7 +21,7 @@ export function NewShopForm() {
         setMessage("");
 
         try {
-            const response = await fetch("/api/staff/shops", {
+            const response = await staffApi("/api/staff/shops", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -71,7 +72,7 @@ export function NewShopForm() {
                 className="w-full"
                 disabled={loading || name == ""}
             >
-                {loading ? "変更中..." : "名前を変更"}
+                {loading ? "作成中..." : "屋台を作成"}
             </Button>
 
             {message && (

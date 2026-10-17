@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Me } from "@/lib/api";
+import { Me, staffApi } from "@/lib/api";
 import { useState } from "react";
 
 export function MeSettingsForm({ me }: { me: Me }) {
@@ -17,7 +17,7 @@ export function MeSettingsForm({ me }: { me: Me }) {
         setMessage("");
 
         try {
-            const response = await fetch("/api/set-name", {
+            const response = await staffApi("/api/set-name", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

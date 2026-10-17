@@ -1,11 +1,11 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
-import { staffApi, type Me, type Shop } from "@/lib/api";
+import { Shop } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { signOut } from "@/lib/signout";
 import Link from "next/link";
 import { getMe, getShops } from "@/lib/me";
+import StaffHeader from "./staff-header";
 
 function Loading() {
     return <p className="text-muted-foreground">読み込み中...</p>;
@@ -18,20 +18,7 @@ async function StaffContent() {
 
     return (
         <>
-            <header className="flex items-center justify-between gap-4">
-                <h1 className="text-2xl font-bold">屋台管理</h1>
-
-                <div className="flex items-center gap-4">
-                    <Link href="/staff/me">{me.name}</Link>
-
-                    <form action={signOut}>
-                        <Button type="submit" variant="outline">
-                            サインアウト
-                        </Button>
-                    </form>
-                </div>
-            </header>
-
+            <StaffHeader me={me} title="屋台管理" />
             <ShopList shops={shops.shops} />
         </>
     );
