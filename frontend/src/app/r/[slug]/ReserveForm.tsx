@@ -51,7 +51,7 @@ export default function ReserveForm({ shop }: { shop: Shop }) {
             <CardHeader className="items-center text-center">
                 <CardTitle className="flex flex-row items-center justify-center gap-2 text-lg font-bold">
                     <Clock />
-                    &quot;{shop.name}&quot; を予約
+                    {shop.name}を予約
                 </CardTitle>
 
                 <CardDescription>
