@@ -21,11 +21,13 @@ export function NewShopForm() {
         setMessage("");
 
         try {
-            const success = await createNewShop(name, notifyPrevious);
-            if (!success) throw new Error("Shop addition failed");
+            const response = await createNewShop(name, notifyPrevious);
+            console.log(response);
+            if (!response.ok) throw new Error("Shop addition failed");
 
             redirect("/staff");
-        } catch {
+        } catch (error) {
+            console.log(error);
             setMessage("屋台の追加に失敗しました。もう一度お試しください。");
         }
 
