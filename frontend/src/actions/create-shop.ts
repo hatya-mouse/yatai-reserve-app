@@ -1,13 +1,13 @@
 "use server";
 
-import { staffApi } from "@/lib/api";
+import { authApi } from "@/lib/api";
 
 export async function createNewShop(
     name: string,
     notifyPrevious: boolean,
 ): Promise<boolean> {
     return (
-        await staffApi("/staff/shops", {
+        await authApi("/staff/shops", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

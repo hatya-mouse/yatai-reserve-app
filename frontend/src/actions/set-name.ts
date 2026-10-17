@@ -1,10 +1,10 @@
 "use server";
 
-import { staffApi } from "@/lib/api";
+import { authApi } from "@/lib/api";
 
 export async function setUserName(newName: string): Promise<boolean> {
     return (
-        await staffApi("/set-name", {
+        await authApi("/staff/set-name", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

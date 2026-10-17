@@ -1,6 +1,6 @@
 "use server";
 
-import { staffApi } from "@/lib/api";
+import { authApi } from "@/lib/api";
 
 export async function addMember(
     shop_id: string,
@@ -8,7 +8,7 @@ export async function addMember(
     isAdmin: boolean,
 ): Promise<boolean> {
     return (
-        await staffApi(`/staff/shops/${shop_id}/members`, {
+        await authApi(`/staff/shops/${shop_id}/members`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

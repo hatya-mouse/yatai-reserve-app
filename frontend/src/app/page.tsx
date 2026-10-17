@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { staffApi } from "@/lib/api";
+import { authApi } from "@/lib/api";
 import SignInForm from "./sign-in-form";
 
 async function AuthCheck() {
@@ -11,7 +11,7 @@ async function AuthCheck() {
         let authenticated = false;
 
         try {
-            const response = await staffApi("/staff/me");
+            const response = await authApi("/staff/me");
             authenticated = response.ok;
         } catch {
             authenticated = false;

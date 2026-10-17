@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
-import { staffApi, Me, Shops } from "./api";
+import { authApi, Me, Shops } from "./api";
 
 export async function getMe() {
-    const response = await staffApi("/staff/me");
+    const response = await authApi("/staff/me");
 
     if (response.status === 401 || response.status === 403) {
         redirect("/");
@@ -15,7 +15,7 @@ export async function getMe() {
 }
 
 export async function getShops() {
-    const response = await staffApi("/staff/shops");
+    const response = await authApi("/staff/shops");
 
     if (response.status === 401 || response.status === 403) {
         redirect("/");

@@ -2,11 +2,11 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { staffApi } from "@/lib/api";
+import { authApi } from "@/lib/api";
 
 export async function signOut() {
     try {
-        await staffApi("/staff/signout", {
+        await authApi("/staff/signout", {
             method: "POST",
         });
     } finally {

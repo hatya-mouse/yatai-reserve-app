@@ -27,7 +27,7 @@ export type Members = {
     members: Member[];
 };
 
-export async function staffApi(path: string, init: RequestInit = {}) {
+export async function authApi(path: string, init: RequestInit = {}) {
     const token = (await cookies()).get("session")?.value;
 
     if (!token) {
@@ -43,7 +43,7 @@ export async function staffApi(path: string, init: RequestInit = {}) {
         cache: "no-store",
     });
 
-    console.log(`[staffApi] ${path}: ${response.status}`);
+    console.log(`[authApi] ${path}: ${response.status}`);
 
     return response;
 }
