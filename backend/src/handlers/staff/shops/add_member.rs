@@ -10,6 +10,7 @@ use serde::Deserialize;
 #[serde(deny_unknown_fields)]
 pub(crate) struct AddShopMemberRequest {
     email: String,
+    is_admin: bool,
 }
 
 pub(crate) async fn add_member(
@@ -47,13 +48,14 @@ pub(crate) async fn add_member(
 
     let result = sqlx::query(
         r#"
-        INSERT INTO shop_members (shop_id, email)
-        VALUES (?, ?)
+        INSERT INTO shop_members (shop_id, email, is_admin)
+        VALUES (?, ?, ?)
         ON CONFLICT(shop_id, email) DO NOTHING
         "#,
     )
     .bind(&shop_id)
     .bind(&email)
+    .bind(body.is_admin)
     .execute(&mut *tx)
     .await?;
 
