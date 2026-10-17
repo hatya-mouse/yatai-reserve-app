@@ -43,7 +43,7 @@ export default function SignInForm() {
                     </CardTitle>
                 </CardHeader>
 
-                <CardContent className="flex flex-col items-center">
+                <CardContent className="flex flex-col items-strech">
                     <form className="space-y-4" onSubmit={handleSubmit}>
                         <div className="space-y-2">
                             <Label htmlFor="email">メールアドレス</Label>
