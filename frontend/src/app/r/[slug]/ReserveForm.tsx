@@ -30,6 +30,8 @@ export default function ReserveForm({ shop }: { shop: Shop }) {
 
             if (response.status === 409) {
                 setMessage("メールアドレスがすでに使用されています。");
+                setLoading(false);
+                return;
             } else if (!response.ok) {
                 throw new Error("Sign-in request failed");
             }

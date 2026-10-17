@@ -63,7 +63,7 @@ export function ShopMembers({
                     >
                         <div className="min-w-0 space-y-1">
                             <p className="font-medium truncate">
-                                {member.name || member.email}
+                                {member.name || "不明"}
                             </p>
                             <p className="text-sm text-muted-foreground break-all">
                                 {member.email}
