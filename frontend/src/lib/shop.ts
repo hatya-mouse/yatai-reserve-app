@@ -2,7 +2,9 @@ import { redirect } from "next/navigation";
 import { Members, Shop, staffApi } from "./api";
 
 export async function getShop(shop_id: string) {
-    const response = await staffApi(`/staff/shops/${shop_id}`);
+    const response = await staffApi(`/staff/shops/${shop_id}`, {
+        method: "GET",
+    });
 
     if (response.status === 401 || response.status === 403) {
         redirect("/");
@@ -15,7 +17,9 @@ export async function getShop(shop_id: string) {
 }
 
 export async function getMembers(shop_id: string) {
-    const response = await staffApi(`/staff/shops/${shop_id}/members`);
+    const response = await staffApi(`/staff/shops/${shop_id}/members`, {
+        method: "GET",
+    });
 
     if (response.status === 401 || response.status === 403) {
         redirect("/");
