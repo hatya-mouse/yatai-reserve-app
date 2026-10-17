@@ -70,13 +70,13 @@ export function ShopMembers({
 
         startTransition(async () => {
             try {
-                const response = await updateMember(
+                const success = await updateMember(
                     shopId,
                     memberEmail,
                     nextIsAdmin,
                 );
 
-                if (!response.ok) {
+                if (!success) {
                     setMessage("権限の変更に失敗しました。もう一度お試しください。");
                     return;
                 }
