@@ -94,7 +94,7 @@ pub(crate) async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
     // reservations stores all information of each reservations.
     sqlx::query(
         r#"
-        CREATE UNIQUE INDEX TABLE IF NOT EXISTS reservations (
+        CREATE TABLE IF NOT EXISTS reservations (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             shop_id TEXT NOT NULL,
             email TEXT NOT NULL,
