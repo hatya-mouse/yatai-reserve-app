@@ -5,20 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Reservation } from "@/lib/reservation";
 import { callReservation, updateReservation } from "@/actions/reservation";
-
-const statusLabels: Record<Reservation["status"], string> = {
-    waiting: "呼出待ち",
-    called: "呼出済み",
-    cancelled: "キャンセル",
-    completed: "完了",
-};
-
-const statusStyles: Record<Reservation["status"], string> = {
-    waiting: "bg-yellow-100 text-yellow-800",
-    called: "bg-blue-100 text-blue-800",
-    cancelled: "bg-gray-100 text-gray-600",
-    completed: "bg-green-100 text-green-800",
-};
+import { StatusLabel, statusLabels } from "@/app/StatusLabel";
 
 export function ReservationList({
     shopId,
@@ -121,13 +108,7 @@ export function ReservationList({
                                     </p>
                                 </div>
 
-                                <span
-                                    className={`rounded-full px-3 py-1 text-xs font-medium ${
-                                        statusStyles[reservation.status]
-                                    }`}
-                                >
-                                    {statusLabels[reservation.status]}
-                                </span>
+                                <StatusLabel status={reservation.status} />
                             </div>
 
                             <div className="flex flex-wrap gap-2">

@@ -1,18 +1,12 @@
 import { getReservationStatus } from "@/lib/status";
 import { notFound } from "next/navigation";
+import { StatusLabel } from "../StatusLabel";
 
 type Props = {
     searchParams: Promise<{
         token?: string;
     }>;
 };
-
-const statusLabels = {
-    waiting: "順番待ち",
-    called: "お呼び出し中",
-    cancelled: "キャンセル済み",
-    completed: "完了",
-} as const;
 
 function formatDate(timestamp: number) {
     return new Intl.DateTimeFormat("ja-JP", {
@@ -74,10 +68,7 @@ export default async function StatusPage({ searchParams }: Props) {
                                     </p>
                                 </div>
 
-                                <span className="shrink-0 rounded-full bg-muted px-3 py-1 text-sm">
-                                    {statusLabels[reservation.status] ??
-                                        reservation.status}
-                                </span>
+                                <StatusLabel status={reservation.status} />
                             </div>
 
                             {reservation.status === "waiting" &&
