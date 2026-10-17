@@ -9,7 +9,7 @@ pub(crate) struct MeResponse {
     email: String,
 }
 
-pub(crate) async fn list(
+pub(crate) async fn me(
     Extension(user): Extension<AuthUser>,
     State(state): State<AppState>,
 ) -> Result<Json<MeResponse>, AppError> {
