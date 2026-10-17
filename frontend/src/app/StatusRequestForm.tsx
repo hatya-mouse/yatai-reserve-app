@@ -47,11 +47,6 @@ export default function StatusRequestForm() {
                         <Store />
                         予約状況の確認
                     </CardTitle>
-                    <CardDescription>
-                        <Link href="/staff/signin">
-                            運営者のサインインはこちら
-                        </Link>
-                    </CardDescription>
                 </CardHeader>
 
                 <CardContent>
@@ -90,6 +85,8 @@ export default function StatusRequestForm() {
                             </p>
                         )}
                     </form>
+
+                    <Link href="/staff/signin">運営者のサインインはこちら</Link>
                 </CardContent>
             </Card>
         </main>

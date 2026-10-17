@@ -47,9 +47,6 @@ export default function SignInForm() {
                         <Store />
                         運営者向けサインイン
                     </CardTitle>
-                    <CardDescription>
-                        <Link href="/">一般向けの予約状況確認はこちら</Link>
-                    </CardDescription>
                 </CardHeader>
 
                 <CardContent>
@@ -88,6 +85,8 @@ export default function SignInForm() {
                             </p>
                         )}
                     </form>
+
+                    <Link href="/">一般向けの予約状況確認はこちら</Link>
                 </CardContent>
             </Card>
         </main>
