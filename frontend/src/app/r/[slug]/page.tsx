@@ -9,9 +9,10 @@ async function ReserveContent({
     params: Promise<{ slug: string }>;
 }) {
     const slug = (await params).slug;
+    let shop;
+
     try {
-        const shop = await getShop(slug);
-        return <ReserveForm shop={shop} />;
+        shop = await getShop(slug);
     } catch {
         return (
             <p className="text-muted-foreground">
@@ -19,6 +20,8 @@ async function ReserveContent({
             </p>
         );
     }
+
+    return <ReserveForm shop={shop} />;
 }
 
 export default function ReservePage({

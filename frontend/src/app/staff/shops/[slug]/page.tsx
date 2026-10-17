@@ -43,7 +43,7 @@ async function ShopContent({ params }: { params: Promise<{ slug: string }> }) {
                             予約用リンク
                         </span>
                         <span className="font-mono text-sm">
-                            https://reserve.hatya.dev/r/{shop.id}/
+                            https://reserve.hatya.dev/r/{shop.id}
                         </span>
                     </div>
                 </div>

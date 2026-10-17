@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Shop } from "@/lib/api";
-import { Clock, Mail } from "lucide-react";
+import { Check, Clock } from "lucide-react";
 import { useState } from "react";
 
 export default function ReserveForm({ shop }: { shop: Shop }) {
@@ -72,7 +72,7 @@ export default function ReserveForm({ shop }: { shop: Shop }) {
                     </div>
 
                     <Button type="submit" className="w-full" disabled={loading}>
-                        <Mail className="mr-2 size-4" />
+                        <Check className="mr-2 size-4" />
                         {loading ? "予約中..." : "予約を確定"}
                     </Button>
 
