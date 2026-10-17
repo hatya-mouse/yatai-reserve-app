@@ -26,14 +26,13 @@ export default function ReserveForm({ shop }: { shop: Shop }) {
         setMessage("");
 
         try {
-            const response = await reserve(shop.id, email);
-            console.log("Reservation response: ", response);
+            const status = await reserve(shop.id, email);
 
-            if (response.status === 409) {
+            if (status === 409) {
                 setMessage("メールアドレスがすでに使用されています。");
                 setLoading(false);
                 return;
-            } else if (!response.ok) {
+            } else if (status !== 200) {
                 throw new Error("Sign-in request failed");
             }
 
