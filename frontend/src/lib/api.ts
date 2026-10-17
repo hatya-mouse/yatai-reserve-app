@@ -18,9 +18,9 @@ export type Me = {
 };
 
 export type Member = {
-    name: string;
+    name: string | null;
     email: string;
-    is_admin: boolean | null;
+    is_admin: boolean;
 };
 
 export type Members = {
