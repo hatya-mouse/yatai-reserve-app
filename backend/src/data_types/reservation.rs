@@ -21,6 +21,8 @@ pub(crate) struct ReservationItems {
 #[derive(Debug, Serialize, FromRow)]
 pub(crate) struct StatusItem {
     pub id: i64,
+    pub shop_id: String,
+    pub shop_name: String,
     pub status: String,
     pub created_at: i64,
     pub position: Option<i64>,

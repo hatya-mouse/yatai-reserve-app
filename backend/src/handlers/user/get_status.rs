@@ -33,6 +33,8 @@ pub(crate) async fn get_status(
         r#"
         SELECT
             r.id,
+            r.shop_id,
+            s.name AS shop_name,
             r.status,
             r.created_at,
             CASE
@@ -49,7 +51,7 @@ pub(crate) async fn get_status(
         FROM reservations AS r
         JOIN shops AS s ON s.id = r.shop_id
         WHERE r.email = ?
-        ORDER BY r.id ASC;
+        ORDER BY r.created_at ASC, r.id ASC;
         "#,
     )
     .bind(&email)

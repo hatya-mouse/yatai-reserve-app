@@ -7,8 +7,8 @@ import { Reservation } from "@/lib/reservation";
 import { callReservation, updateReservation } from "@/actions/reservation";
 
 const statusLabels: Record<Reservation["status"], string> = {
-    waiting: "予約待ち",
-    called: "呼び出し済み",
+    waiting: "呼出待ち",
+    called: "呼出済み",
     cancelled: "キャンセル",
     completed: "完了",
 };
