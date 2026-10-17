@@ -1,7 +1,7 @@
 use crate::{
     AppState,
     error::AppError,
-    handlers::user::{renew_status_token, send_status_email},
+    handlers::{email::send_status_email, user::renew_status_token},
 };
 use axum::{
     Json,

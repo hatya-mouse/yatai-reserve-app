@@ -59,11 +59,8 @@ pub(crate) async fn call(
         state.config.resend_key.clone(),
         state.config.email.clone(),
         email,
-        format!("\"{}\" に呼ばれました", shop_name),
-        format!(
-            "<p>あなたの番になりました。\"{}\" の場所までお越しください。</p>",
-            shop_name
-        ),
+        format!("【{}】お呼び出しのお知らせ", shop_name),
+        format!("<p>{}をご予約いただきありがとうございます。</p><p>お客様の順番になりましたので、お知らせいたします。<br/>お手数ですが、受付までお越しください。</p>", shop_name),
     )
     .await
     .map_err(|_| AppError::Internal)?;
@@ -71,11 +68,14 @@ pub(crate) async fn call(
     if let Some(email) = next_email {
         send_email(
             state.config.resend_key.clone(),
+
             state.config.email.clone(),
             email,
-            format!("まもなく \"{}\" の順番がまわってきます", shop_name),
+            String::from("【{}】まもなく順番です"),
             format!(
-                "<p>\"{}\" であなたの1つ前のお客様が呼ばれました。</p>",
+                "<p>{}をご予約いただきありがとうございます。</p>
+                <p>お客様の順番が近づいてまいりました。<br/>まもなくお呼び出しいたしますので、受付付近でお待ちいただくか、すぐにお越しいただけるようご準備ください。</p>
+                <p>順番になりましたら、改めてメールでお知らせいたします。</p>",
                 shop_name
             ),
         )

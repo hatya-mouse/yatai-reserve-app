@@ -8,12 +8,7 @@ pub(crate) use get_status::get_status;
 pub(crate) use request_status::request_status;
 pub(crate) use reserve::reserve;
 
-use crate::{
-    AppState,
-    error::AppError,
-    tui::println_error,
-    utils::{gen_secure_token, send_email},
-};
+use crate::{AppState, error::AppError, utils::gen_secure_token};
 use chrono::Utc;
 use serde::Deserialize;
 use std::time::Duration;
@@ -21,37 +16,6 @@ use std::time::Duration;
 #[derive(Debug, Deserialize)]
 pub(crate) struct StatusQuery {
     token: String,
-}
-
-/// Sends the reservation status email to the given email address.
-async fn send_status_email(state: &AppState, email: &str, token: &str) -> Result<(), AppError> {
-    let config = &state.config;
-    let link = format!("{}{}", config.status_url, token);
-
-    let subject = "予約状況の確認";
-    let html_content = format!(
-        r#"
-        <p>予約状況を確認するには、以下のリンクを開いてください。</p>
-        <p><a href="{link}">予約状況を確認する</a></p>
-        <p>このリンクは発行から24時間有効です。</p>
-        <p>このメールに心当たりがない場合は、破棄してください。</p>
-        "#
-    );
-
-    send_email(
-        config.resend_key.clone(),
-        config.email.clone(),
-        email.to_owned(),
-        subject.to_owned(),
-        html_content,
-    )
-    .await
-    .map_err(|e| {
-        println_error(format!("Failed to send status email: {e}"));
-        AppError::Internal
-    })?;
-
-    Ok(())
 }
 
 /// Renews the status token for the given email address and returns the newly generated token.
