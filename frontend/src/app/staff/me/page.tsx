@@ -3,8 +3,18 @@ import { MeSettingsForm } from "./form";
 import { signOut } from "@/lib/signout";
 import { getMe } from "@/lib/me";
 import { redirect } from "next/navigation";
+import Link from "next/link";
+import { Suspense } from "react";
 
 export default async function MePage() {
+    return (
+        <Suspense>
+            <MePageContent />
+        </Suspense>
+    );
+}
+
+async function MePageContent() {
     const me = await getMe();
     if (!me) redirect("/");
 
@@ -14,7 +24,7 @@ export default async function MePage() {
                 <h1 className="text-2xl font-bold">ユーザの設定</h1>
 
                 <div className="flex flex-row gap-4">
-                    {me.name}
+                    <Link href="/staff/me">{me.name}</Link>
                     <form action={signOut}>
                         <Button type="submit" variant="outline">
                             サインアウト
