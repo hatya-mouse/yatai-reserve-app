@@ -2,7 +2,7 @@
 
 import { staffApi } from "@/lib/api";
 
-export async function createNewYatai(
+export async function createNewShop(
     name: string,
     notifyPrevious: boolean,
 ): Promise<boolean> {

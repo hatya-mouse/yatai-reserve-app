@@ -1,6 +1,6 @@
 "use client";
 
-import { createNewYatai } from "@/actions/create-yatai";
+import { createNewShop } from "@/actions/create-shop";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
@@ -20,7 +20,7 @@ export function NewShopForm() {
         setLoading(true);
         setMessage("");
 
-        if (await createNewYatai(name, notifyPrevious)) {
+        if (await createNewShop(name, notifyPrevious)) {
             redirect("/staff");
         } else {
             setMessage("屋台の追加に失敗しました。もう一度お試しください。");
