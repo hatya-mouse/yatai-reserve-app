@@ -44,6 +44,7 @@ export async function authApi(path: string, init: RequestInit = {}) {
     });
 
     console.log(`[authApi] ${path}: ${response.status}`);
+    console.log(response);
 
     return response;
 }
