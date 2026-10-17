@@ -80,7 +80,7 @@ export default function SignInForm() {
                         )}
                     </form>
 
-                    <Link href="/" className="mt-2 text-center">
+                    <Link href="/" className="mt-2 text-center hover:underline">
                         一般向けの予約状況確認はこちら
                     </Link>
                 </CardContent>

@@ -7,13 +7,18 @@ import { Home } from "lucide-react";
 export default function StaffHeader({ me }: { me: Me }) {
     return (
         <header className="flex items-center justify-between gap-4 pb-2 border-b">
-            <Link href="/staff" className="text-xl font-bold flex items-center">
+            <Link
+                href="/staff"
+                className="text-xl font-bold flex items-center hover:underline"
+            >
                 <Home className="block sm:hidden" />
                 <h1 className="hidden sm:block">工嶺祭予約アプリ</h1>
             </Link>
 
             <div className="flex flex-row items-center gap-4">
-                <Link href="/staff/me">{me.name}</Link>
+                <Link href="/staff/me" className="hover:underline">
+                    {me.name}
+                </Link>
 
                 <form action={signOut}>
                     <Button type="submit" variant="outline">
