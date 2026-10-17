@@ -1,17 +1,23 @@
 mod add_member;
 mod create;
+mod delete;
 mod get;
 mod get_members;
 mod list;
+mod remove_member;
 pub(crate) mod reservations;
 mod update;
+mod update_member;
 
 pub(crate) use add_member::add_member;
 pub(crate) use create::create;
+pub(crate) use delete::delete;
 pub(crate) use get::get;
 pub(crate) use get_members::get_members;
 pub(crate) use list::list;
+pub(crate) use remove_member::remove_member;
 pub(crate) use update::update;
+pub(crate) use update_member::update_member;
 
 use crate::{data_types::AuthUser, error::AppError};
 use axum::{

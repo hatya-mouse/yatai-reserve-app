@@ -52,11 +52,16 @@ async fn main() {
     let shops_routes = Router::new()
         .route(
             "/",
-            get(handlers::staff::shops::get).patch(handlers::staff::shops::update),
+            get(handlers::staff::shops::get)
+                .patch(handlers::staff::shops::update)
+                .delete(handlers::staff::shops::delete),
         )
         .route(
             "/members",
-            get(handlers::staff::shops::get_members).post(handlers::staff::shops::add_member),
+            get(handlers::staff::shops::get_members)
+                .post(handlers::staff::shops::add_member)
+                .patch(handlers::staff::shops::update_member)
+                .delete(handlers::staff::shops::remove_member),
         )
         .route(
             "/reservations",
