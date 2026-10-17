@@ -45,23 +45,23 @@ function ShopList({ shops }: { shops: Shop[] }) {
             ) : (
                 <div className="grid gap-4 sm:grid-cols-2">
                     {shops.map((shop) => (
-                        <Card key={shop.id}>
-                            <CardHeader>
-                                <CardTitle>{shop.name}</CardTitle>
-                            </CardHeader>
+                        <Link href={`/staff/shops/${shop.id}`} key={shop.id}>
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>{shop.name}</CardTitle>
+                                </CardHeader>
 
-                            <CardContent className="flex items-center justify-between gap-3">
-                                <span className="text-sm text-muted-foreground">
-                                    {shop.notify_previous
-                                        ? "前の予約者に通知する"
-                                        : "前の予約者に通知しない"}
-                                </span>
+                                <CardContent className="flex items-center justify-between gap-3">
+                                    <span className="text-sm text-muted-foreground">
+                                        {shop.notify_previous
+                                            ? "前の予約者に通知する"
+                                            : "前の予約者に通知しない"}
+                                    </span>
 
-                                <Link href={`/staff/shops/${shop.id}`}>
                                     <Button variant="outline">管理</Button>
-                                </Link>
-                            </CardContent>
-                        </Card>
+                                </CardContent>
+                            </Card>
+                        </Link>
                     ))}
                 </div>
             )}
@@ -71,7 +71,7 @@ function ShopList({ shops }: { shops: Shop[] }) {
 
 export default function StaffPage() {
     return (
-        <main className="mx-auto min-h-svh w-full max-w-4xl space-y-6 px-4 py-4">
+        <main className="mx-auto min-h-svh w-full max-w-4xl space-y-6 px-4 py-6">
             <Suspense fallback={<Loading />}>
                 <StaffContent />
             </Suspense>
