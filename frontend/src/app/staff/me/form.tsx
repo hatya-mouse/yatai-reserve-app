@@ -1,9 +1,10 @@
 "use client";
 
+import { setUserName } from "@/actions/set-name";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Me, staffApi } from "@/lib/api";
+import { Me } from "@/lib/api";
 import { useState } from "react";
 
 export function MeSettingsForm({ me }: { me: Me }) {
@@ -16,25 +17,12 @@ export function MeSettingsForm({ me }: { me: Me }) {
         setLoading(true);
         setMessage("");
 
-        try {
-            const response = await staffApi("/api/set-name", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ name, email: me.email }),
-            });
-
-            if (!response.ok) {
-                throw new Error("Request failed");
-            }
-
+        if (await setUserName(name)) {
             setMessage("名前を変更しました。");
-        } catch {
+        } else {
             setMessage("名前の変更に失敗しました。もう一度お試しください。");
-        } finally {
-            setLoading(false);
         }
+        setLoading(false);
     }
 
     return (

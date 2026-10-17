@@ -1,11 +1,11 @@
 "use client";
 
+import { createNewYatai } from "@/actions/create-yatai";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { staffApi } from "@/lib/api";
 import { redirect } from "next/navigation";
 import { useState } from "react";
 
@@ -20,25 +20,12 @@ export function NewShopForm() {
         setLoading(true);
         setMessage("");
 
-        try {
-            const response = await staffApi("/api/staff/shops", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ name, notify_previous: notifyPrevious }),
-            });
-
-            if (!response.ok) {
-                throw new Error("Request failed");
-            }
-
+        if (await createNewYatai(name, notifyPrevious)) {
             redirect("/staff");
-        } catch {
+        } else {
             setMessage("屋台の追加に失敗しました。もう一度お試しください。");
-        } finally {
-            setLoading(false);
         }
+        setLoading(false);
     }
 
     return (

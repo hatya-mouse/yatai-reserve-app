@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Me } from "@/lib/api";
-import { signOut } from "@/lib/signout";
+import { signOut } from "@/actions/signout";
 import Link from "next/link";
 
 export default function StaffHeader({
