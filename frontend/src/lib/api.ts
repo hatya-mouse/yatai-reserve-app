@@ -20,7 +20,7 @@ export type Me = {
 export type Member = {
     name: string;
     email: string;
-    is_admin: boolean;
+    is_admin: boolean | null;
 };
 
 export type Members = {

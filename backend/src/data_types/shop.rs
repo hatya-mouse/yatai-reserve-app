@@ -12,7 +12,7 @@ pub(crate) struct ShopResponse {
 pub(crate) struct ShopMemberResponse {
     pub email: String,
     pub is_admin: bool,
-    pub name: String,
+    pub name: Option<String>,
 }
 
 #[derive(Debug, Serialize, FromRow)]
