@@ -80,7 +80,7 @@ export default function StatusRequestForm() {
                         )}
                     </form>
 
-                    <Link href="/staff/signin" className="mt-2">
+                    <Link href="/staff/signin" className="mt-2 text-center">
                         運営者のサインインはこちら
                     </Link>
                 </CardContent>
