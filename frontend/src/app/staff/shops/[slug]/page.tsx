@@ -52,7 +52,7 @@ async function ShopContent({ params }: { params: Promise<{ slug: string }> }) {
             </section>
 
             <div className="flex flex-wrap gap-3">
-                <Link href={`/staff/shops/${shop.id}/reservations`}>
+                <Link href={`/staff/shops/${shop.id}/reserve`}>
                     <Button>予約一覧</Button>
                 </Link>
             </div>
