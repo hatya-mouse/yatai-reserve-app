@@ -77,7 +77,7 @@ export function ShopMembers({
                 );
 
                 if (!response.ok) {
-                    setMessage("権限の変更に失敗しました。");
+                    setMessage("権限の変更に失敗しました。もう一度お試しください。");
                     return;
                 }
 
@@ -102,21 +102,16 @@ export function ShopMembers({
         setMessage("");
 
         try {
-            const response = await removeMember(shopId, memberEmail);
+            const success = await removeMember(shopId, memberEmail);
 
-            console.log("removeMember status:", response.status);
-
-            if (!response.ok) {
-                const body = await response.text();
-                console.error("removeMember error:", body);
-                setMessage(`メンバーの削除に失敗しました（HTTP ${response.status}）。`);
+            if (!success) {
+                setMessage("メンバーの削除に失敗しました。もう一度お試しください。");
                 return;
             }
 
             setMessage("メンバーを削除しました。");
             router.refresh();
         } catch (error) {
-            console.error("removeMember exception:", error);
             setMessage("メンバーの削除に失敗しました。もう一度お試しください。");
         }
     }

@@ -23,9 +23,8 @@ export function NewShopForm() {
         setMessage("");
 
         try {
-            const response = await createNewShop(name, notifyPrevious);
-
-            if (!response.ok) {
+            const success = await createNewShop(name, notifyPrevious);
+            if (!success) {
                 setMessage("屋台の追加に失敗しました。もう一度お試しください。");
                 return;
             }
@@ -35,9 +34,8 @@ export function NewShopForm() {
         } catch (error) {
             console.error("屋台の追加に失敗:", error);
             setMessage("屋台の追加に失敗しました。もう一度お試しください。");
-        } finally {
-            setLoading(false);
         }
+        setLoading(false);
     }
 
     return (
