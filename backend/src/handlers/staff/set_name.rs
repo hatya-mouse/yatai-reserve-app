@@ -14,7 +14,7 @@ pub(crate) async fn set_name(
     State(state): State<AppState>,
     Json(body): Json<SetNameRequest>,
 ) -> Result<StatusCode, AppError> {
-    let me = sqlx::query_as(
+    sqlx::query(
         r#"
         UPDATE staffs
         SET
@@ -24,7 +24,7 @@ pub(crate) async fn set_name(
     )
     .bind(body.name.trim())
     .bind(&body.email)
-    .fetch_one(&state.pool)
+    .execute(&state.pool)
     .await?;
 
     Ok(StatusCode::OK)
