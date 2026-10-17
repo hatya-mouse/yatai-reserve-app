@@ -27,6 +27,7 @@ export default function ReserveForm({ shop }: { shop: Shop }) {
 
         try {
             const response = await reserve(shop.id, email);
+            console.log("Reservation response: ", response);
 
             if (response.status === 409) {
                 setMessage("メールアドレスがすでに使用されています。");
