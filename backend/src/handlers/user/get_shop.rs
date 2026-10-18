@@ -1,16 +1,11 @@
-use crate::{
-    AppState,
-    data_types::{AuthUser, ShopResponse},
-    error::AppError,
-};
+use crate::{AppState, data_types::ShopResponse, error::AppError};
 use axum::{
-    Extension, Json,
+    Json,
     extract::{Path, State},
 };
 
 pub(crate) async fn get_shop(
     State(state): State<AppState>,
-    Extension(user): Extension<AuthUser>,
     Path(shop_id): Path<String>,
 ) -> Result<Json<ShopResponse>, AppError> {
     let shop = sqlx::query_as::<_, ShopResponse>(
@@ -23,11 +18,9 @@ pub(crate) async fn get_shop(
         INNER JOIN shop_members
             ON shop_members.shop_id = shops.id
         WHERE shops.id = ?
-            AND shop_members.email = ?
         "#,
     )
     .bind(&shop_id)
-    .bind(&user.email)
     .fetch_optional(&state.pool)
     .await?
     .ok_or(AppError::NotFound)?;

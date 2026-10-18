@@ -10,7 +10,6 @@ export async function getShop(shopId: string) {
         redirect("/");
     }
     if (!response.ok) {
-        console.log("Error on /user/shops/", response);
         throw new Error("屋台情報の取得に失敗しました");
     }
 
