@@ -1,9 +1,11 @@
 mod cancel;
+mod get_shop;
 mod get_status;
 mod request_status;
 mod reserve;
 
 pub(crate) use cancel::cancel;
+pub(crate) use get_shop::get_shop;
 pub(crate) use get_status::get_status;
 pub(crate) use request_status::request_status;
 pub(crate) use reserve::reserve;

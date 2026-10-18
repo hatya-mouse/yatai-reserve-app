@@ -8,7 +8,7 @@ use axum::{
     extract::{Path, State},
 };
 
-pub(crate) async fn get(
+pub(crate) async fn get_shop(
     State(state): State<AppState>,
     Extension(user): Extension<AuthUser>,
     Path(shop_id): Path<String>,

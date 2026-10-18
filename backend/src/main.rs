@@ -13,7 +13,7 @@ use crate::{
 };
 use axum::{
     Router, middleware,
-    routing::{get, post},
+    routing::{get, patch, post},
 };
 use sqlx::sqlite::SqlitePoolOptions;
 use std::time::Duration;
@@ -52,9 +52,7 @@ async fn main() {
     let shops_routes = Router::new()
         .route(
             "/",
-            get(handlers::staff::shops::get)
-                .patch(handlers::staff::shops::update)
-                .delete(handlers::staff::shops::delete),
+            patch(handlers::staff::shops::update).delete(handlers::staff::shops::delete),
         )
         .route(
             "/members",
@@ -92,6 +90,7 @@ async fn main() {
         ));
 
     let user_routes = Router::new()
+        .route("/shops/{shop_id}", post(handlers::user::get_shop))
         .route("/shops/{shop_id}/reserve", post(handlers::user::reserve))
         .route(
             "/reservations/{reservation_id}/cancel",

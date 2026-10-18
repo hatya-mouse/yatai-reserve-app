@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
-import { Members, Shop, authApi } from "./api";
+import { Members, Shop, authApi, fetchBackend } from "./api";
 
 export async function getShop(shopId: string) {
-    const response = await authApi(`/staff/shops/${shopId}`, {
+    const response = await fetchBackend(`/user/shops/${shopId}`, {
         method: "GET",
     });
 
