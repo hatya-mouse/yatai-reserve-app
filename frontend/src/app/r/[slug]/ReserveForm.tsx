@@ -32,7 +32,7 @@ export default function ReserveForm({ shop }: { shop: Shop }) {
                 setMessage("メールアドレスがすでに使用されています。");
                 setLoading(false);
                 return;
-            } else if (status !== 200) {
+            } else if (status >= 200 && status < 300) {
                 console.log("Reservation", status);
                 throw new Error("Sign-in request failed");
             }
