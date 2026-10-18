@@ -90,7 +90,7 @@ async fn main() {
         ));
 
     let user_routes = Router::new()
-        .route("/shops/{shop_id}", post(handlers::user::get_shop))
+        .route("/shops/{shop_id}", get(handlers::user::get_shop))
         .route("/shops/{shop_id}/reserve", post(handlers::user::reserve))
         .route(
             "/reservations/{reservation_id}/cancel",
