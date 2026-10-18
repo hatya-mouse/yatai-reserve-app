@@ -15,6 +15,7 @@ pub(super) async fn send_status_email(
             <p>ご利用ありがとうございます。</p>
             <p>以下のリンクから、予約状況や各企画のお呼び出し状況をご確認いただけます。<br/>
             <a href="{}">予約状況を確認する</a></p>
+            <p>このリンクは発行から24時間有効です。</p>
             <p>予約状況は随時更新されますので、必要に応じてご確認ください。</p>
             "#,
         link
@@ -42,7 +43,7 @@ pub(super) async fn send_signin_email(
     token: &str,
 ) -> Result<(), AppError> {
     let config = &state.config;
-    let link = format!("{}{}", config.status_url, token);
+    let link = format!("{}{}", config.verification_url, token);
 
     let subject = "予約管理システムへのサインイン";
     let html_content = format!(
