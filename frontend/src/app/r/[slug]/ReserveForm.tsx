@@ -55,7 +55,7 @@ export default function ReserveForm({ shop }: { shop: Shop }) {
                 </CardTitle>
 
                 <CardDescription>
-                    メールアドレスを登録して予約ができます。その後順番が来ると、登録したメールアドレスに通知が送信されます。
+                    メールアドレスを登録して予約ができます。順番が来ると、登録したメールアドレスに通知が送信されます。
                 </CardDescription>
             </CardHeader>
 

@@ -3,7 +3,7 @@ import { Reservation } from "@/lib/reservation";
 export const statusLabels: Record<Reservation["status"], string> = {
     waiting: "順番待ち",
     called: "呼出済み",
-    cancelled: "キャンセル",
+    cancelled: "キャンセル済み",
     completed: "完了",
 };
 
@@ -15,10 +15,13 @@ const statusStyles: Record<Reservation["status"], string> = {
 };
 
 export function StatusLabel({ status }: { status: Reservation["status"] }) {
-    return (<span
-        className={`rounded-full px-3 py-1 text-xs font-medium ${statusStyles[status]
+    return (
+        <span
+            className={`rounded-full px-3 py-1 text-xs font-medium ${
+                statusStyles[status]
             }`}
-    >
-        {statusLabels[status]}
-    </span>);
+        >
+            {statusLabels[status]}
+        </span>
+    );
 }
