@@ -3,7 +3,7 @@ import { Reservation } from "@/lib/reservation";
 export const statusLabels: Record<Reservation["status"], string> = {
     waiting: "順番待ち",
     called: "呼出済み",
-    cancelled: "キャンセル済み",
+    cancelled: "キャンセル",
     completed: "完了",
 };
 
